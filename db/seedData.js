@@ -5,46 +5,56 @@ const { client } = require("./client");
 //step 3. users for hashing passwords
 async function dropTables() {
   console.log("Dropping All Tables...");
-  await client.query(`
-  DROP TABLE IF EXISTS users;
+  try {
+    await client.query(`
+    DROP TABLE IF EXISTS users;
   `);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function createTables() {
   console.log("Starting to build tables...");
   // create all tables, in the correct order
-  await client.query(`
-  CREATE TABLE users (
-    Id SERIAL PRIMARY KEY,
-    Username VARCHAR(255) UNIQUE NOT NULL,
-    Password VARCHAR(255) NOT NULL,
-  );
-  `);
-  await client.query(`
-  CREATE TABLE activities (
-    Id SERIAL PRIMARY KEY,
-    Name VARCHAR(255) UNIQUE NOT NULL,
-    Description TEXT NOT NULL,
-  );
-  `);
-  await client.query(`
-  CREATE TABLE routines (
-    Id SERIAL PRIMARY KEY,
-    "creatorId" INTEGER FOREIGN KEY,
-    "IsPublic" BOOLEAN DEFAULT false,
-    name VARCHAR(255) UNIQUE NOT NULL,
-    goal TEXT NOT NULL,
-  );
-  `);
-  await client.query(`
-  CREATE TABLE routineActivity (
-    Id SERIAL PRIMARY KEY,
-    "routineId" INTEGER UNIQUE FOREIGN KEY,
-    "activityId" INTEGER UNIQUE FOREIGN KEY,
-    duration INTEGER,
-    count INTEGER,
-  );
-  `);
+  try {
+    await client.query(`
+    CREATE TABLE users(
+      id SERIAL PRIMARY KEY,
+      username VARCHAR(255) UNIQUE NOT NULL,
+      password VARCHAR(255) NOT NULL
+    );
+    `);
+    console.log("finished building tables");
+  } catch (error) {
+    console.log("error building tables", error);
+  }
+
+  // await client.query(`
+  // CREATE TABLE activities (
+  //   id SERIAL PRIMARY KEY,
+  //   name VARCHAR(255) UNIQUE NOT NULL,
+  //   description TEXT NOT NULL,
+  // );
+  // `);
+  // await client.query(`
+  // CREATE TABLE routines (
+  //   id SERIAL PRIMARY KEY,
+  //   "creatorId" INTEGER FOREIGN KEY,
+  //   "IsPublic" BOOLEAN DEFAULT false,
+  //   name VARCHAR(255) UNIQUE NOT NULL,
+  //   goal TEXT NOT NULL,
+  // );
+  // `);
+  // await client.query(`
+  // CREATE TABLE routineActivity (
+  //   id SERIAL PRIMARY KEY,
+  //   "routineId" INTEGER UNIQUE FOREIGN KEY,
+  //   "activityId" INTEGER UNIQUE FOREIGN KEY,
+  //   duration INTEGER,
+  //   count INTEGER,
+  // );
+  // `);
 }
 
 /* 
@@ -225,8 +235,8 @@ async function createInitialRoutineActivities() {
 async function rebuildDB() {
   try {
     client.connect();
-    // await dropTables();
-    // await createTables();
+    await dropTables();
+    await createTables();
     // await createInitialUsers();
     // await createInitialActivities();
     // await createInitialRoutines();
