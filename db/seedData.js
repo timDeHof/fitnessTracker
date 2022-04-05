@@ -8,6 +8,9 @@ async function dropTables() {
   try {
     await client.query(`
     DROP TABLE IF EXISTS users;
+    DROP TABLE IF EXISTS activities;
+    DROP TABLE IF EXISTS routines;
+    DROP TABLE IF EXISTS routineActivity;
   `);
   } catch (error) {
     console.log(error);
@@ -30,20 +33,20 @@ async function createTables() {
     console.log("error building tables", error);
   }
 
-  // await client.query(`
-  // CREATE TABLE activities (
-  //   id SERIAL PRIMARY KEY,
-  //   name VARCHAR(255) UNIQUE NOT NULL,
-  //   description TEXT NOT NULL,
-  // );
-  // `);
+  await client.query(`
+  CREATE TABLE activities (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT NOT NULL
+  );
+  `);
   // await client.query(`
   // CREATE TABLE routines (
   //   id SERIAL PRIMARY KEY,
   //   "creatorId" INTEGER FOREIGN KEY,
-  //   "IsPublic" BOOLEAN DEFAULT false,
+  //   "isPublic" BOOLEAN DEFAULT false,
   //   name VARCHAR(255) UNIQUE NOT NULL,
-  //   goal TEXT NOT NULL,
+  //   goal TEXT NOT NULL
   // );
   // `);
   // await client.query(`
@@ -52,7 +55,7 @@ async function createTables() {
   //   "routineId" INTEGER UNIQUE FOREIGN KEY,
   //   "activityId" INTEGER UNIQUE FOREIGN KEY,
   //   duration INTEGER,
-  //   count INTEGER,
+  //   count INTEGER
   // );
   // `);
 }

@@ -44,7 +44,7 @@ async function createActivity({ name, description }) {
   }
 }
 
-//check line 52 i ncase updateActivity Error
+//check line 52 i inc ase updateActivity Error
 async function updateActivity({ id, name, description }) {
   try {
     const { rows } = await client.query(

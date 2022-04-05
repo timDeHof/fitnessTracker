@@ -1,5 +1,3 @@
-//createUser, createActivity, createRoutine, getRoutineWithoutActivities, getALlActivities, addActivityToRoutine
-
 const { client } = require("./client");
 
 //hash passwords later
