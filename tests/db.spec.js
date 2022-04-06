@@ -39,7 +39,7 @@ describe("Database", () => {
   afterAll(async () => {
     await client.end();
   });
-  describe("Users", () => {
+  xdescribe("Users", () => {
     let userToCreateAndUpdate, queriedUser;
     let userCredentials = { username: "billybob", password: "bobbybadboy" };
     describe("createUser({ username, password })", () => {
