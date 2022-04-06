@@ -16,20 +16,19 @@ async function getActivityById(id) {
 
 async function getAllActivities() {
   try {
-    const { rows } = await client.query(
-      `SELECT * FROM activities
-                `
-    );
-    console.log(rows);
+    const { rows } = await client.query(`SELECT * FROM activities;`);
+    //console.log(rows);
     return rows;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 }
 
 async function createActivity({ name, description }) {
   try {
-    const { rows: activity } = await client.query(
+    const {
+      rows: [activity],
+    } = await client.query(
       `INSERT INTO activities( name, description )
         VALUES ($1, $2)
         ON CONFLICT (name) DO NOTHING
@@ -37,7 +36,7 @@ async function createActivity({ name, description }) {
                   `,
       [name, description]
     );
-    console.log(activity);
+    //console.log(activity);
     return activity;
   } catch (error) {
     console.log(error);
@@ -45,17 +44,26 @@ async function createActivity({ name, description }) {
 }
 
 //check line 52 i inc ase updateActivity Error
-async function updateActivity({ id, name, description }) {
+async function updateActivity({ id, ...fields }) {
+  // console.log("given parameter:", { id, fields });
+
+  const setString = Object.keys(fields)
+    .map((key, index) => `"${key}"=$${index + 1}`)
+    .join(", ");
+  // console.log("setString:", setString);
   try {
-    const { rows } = await client.query(
+    const {
+      rows: [activity],
+    } = await client.query(
       `UPDATE activities
-      SET name = ${name}, description = ${description}
+      SET ${setString}
       WHERE id = ${id}
-                  `,
-      [id, name, description]
+      RETURNING *;
+      `,
+      Object.values(fields)
     );
-    console.log(rows);
-    return rows;
+    // console.log("Updated Activity:", activity);
+    return activity;
   } catch (error) {
     console.log(error);
   }
