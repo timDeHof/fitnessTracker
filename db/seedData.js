@@ -9,13 +9,8 @@ async function dropTables() {
     await client.query(`
     DROP TABLE IF EXISTS routineActivity;
     DROP TABLE IF EXISTS routines;
-<<<<<<< HEAD
-    DROP TABLE IF EXISTS users;
-    DROP TABLE IF EXISTS activities;
-=======
     DROP TABLE IF EXISTS activities;
     DROP TABLE IF EXISTS users;
->>>>>>> 7344bcee620fcd9e09b02752672a19ea66c30750
   `);
   } catch (error) {
     console.log(error);
