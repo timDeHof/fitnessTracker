@@ -7,10 +7,10 @@ async function dropTables() {
   console.log("Dropping All Tables...");
   try {
     await client.query(`
-    DROP TABLE IF EXISTS users;
-    DROP TABLE IF EXISTS activities;
-    DROP TABLE IF EXISTS routines;
     DROP TABLE IF EXISTS routineActivity;
+    DROP TABLE IF EXISTS routines;
+    DROP TABLE IF EXISTS activities;
+    DROP TABLE IF EXISTS users;
   `);
   } catch (error) {
     console.log(error);
@@ -40,24 +40,24 @@ async function createTables() {
     description TEXT NOT NULL
   );
   `);
-  // await client.query(`
-  // CREATE TABLE routines (
-  //   id SERIAL PRIMARY KEY,
-  //   "creatorId" INTEGER FOREIGN KEY,
-  //   "isPublic" BOOLEAN DEFAULT false,
-  //   name VARCHAR(255) UNIQUE NOT NULL,
-  //   goal TEXT NOT NULL
-  // );
-  // `);
-  // await client.query(`
-  // CREATE TABLE routineActivity (
-  //   id SERIAL PRIMARY KEY,
-  //   "routineId" INTEGER UNIQUE FOREIGN KEY,
-  //   "activityId" INTEGER UNIQUE FOREIGN KEY,
-  //   duration INTEGER,
-  //   count INTEGER
-  // );
-  // `);
+  await client.query(`
+  CREATE TABLE routines (
+    id SERIAL PRIMARY KEY,
+    "creatorId" INTEGER REFERENCES users(id) NOT NULL,
+    "isPublic" BOOLEAN DEFAULT false,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    goal TEXT NOT NULL
+  );
+  `);
+  await client.query(`
+  CREATE TABLE routineActivity (
+    id SERIAL PRIMARY KEY,
+    "routineId" INTEGER REFERENCES routines(id) NOT NULL,
+    "activityId" INTEGER REFERENCES activities(id) NOT NULL,
+    duration INTEGER,
+    count INTEGER
+  );
+  `);
 }
 
 /* 
