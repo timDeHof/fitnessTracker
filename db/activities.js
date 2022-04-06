@@ -29,7 +29,7 @@ async function getAllActivities() {
 
 async function createActivity({ name, description }) {
   try {
-    const { rows } = await client.query(
+    const { rows: activity } = await client.query(
       `INSERT INTO activities( name, description )
         VALUES ($1, $2)
         ON CONFLICT (name) DO NOTHING
@@ -37,8 +37,8 @@ async function createActivity({ name, description }) {
                   `,
       [name, description]
     );
-    console.log(rows);
-    return rows;
+    console.log(activity);
+    return activity;
   } catch (error) {
     console.log(error);
   }
