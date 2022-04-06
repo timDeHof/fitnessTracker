@@ -1,3 +1,4 @@
+const { user } = require("pg/lib/defaults");
 const { client } = require("./client");
 
 //hash passwords later
@@ -14,7 +15,7 @@ async function createUser({ username, password }) {
       [username, password]
     );
     delete user.password;
-    console.log(user);
+    //console.log(user);
     return user;
   } catch (error) {
     console.log(error);
@@ -22,14 +23,24 @@ async function createUser({ username, password }) {
 }
 
 async function getUser({ username, password }) {
+  console.log("username:", username);
+  console.log("password:", password);
   try {
-    const { rows } = await client.query(
-      `SELECT * FROM users 
-            `,
-      [username, password]
+    const {
+      rows: [user],
+    } = await client.query(
+      `SELECT username, password FROM users; 
+            `
     );
-    console.log(rows);
-    return rows;
+    if (password !== user.password) {
+      throw {
+        name: "PasswordNotCorrectError",
+        message: "Password does not match user in database",
+      };
+    }
+    delete user.password;
+    console.log(user);
+    return user;
   } catch (error) {
     console.log(error);
   }
@@ -37,15 +48,17 @@ async function getUser({ username, password }) {
 
 async function getUserById(userId) {
   try {
-    const { rows: user } = await client.query(
+    const {
+      rows: [user],
+    } = await client.query(
       `SELECT * FROM users
       WHERE id = ${userId};
               `
     );
-    console.log(user);
+    //console.log(user);
     return user;
   } catch (error) {
-    console.log(error);
+    //console.log(error);
   }
 }
 
