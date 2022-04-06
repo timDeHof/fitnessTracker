@@ -1,5 +1,6 @@
 const { user } = require("pg/lib/defaults");
 const { client } = require("./client");
+const { attachActivitiesToRoutines } = require("./activities");
 
 async function getRoutineById(id) {
   try {
@@ -41,11 +42,9 @@ async function getAllRoutines() {
   try {
     const { rows: routines } = await client.query(
       `SELECT routines.*, users.username as "creatorName" FROM routines
-        JOIN users ON routines."creatorId" = users.id;
-        
-        `
+        JOIN users ON routines."creatorId" = users.id;`
     );
-    console.log(routines);
+    console.log("routines:", routines);
     return attachActivitiesToRoutines(routines);
   } catch (error) {
     console.log(error);
@@ -77,7 +76,7 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
     INSERT INTO routines("creatorId", "isPublic", name, goal)
     VALUES ($1,$2,$3,$4)
     ON CONFLICT (name) DO NOTHING
-    RETURNING*
+    RETURNING *;
     `,
       [creatorId, isPublic, name, goal]
     );
