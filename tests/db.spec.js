@@ -95,7 +95,7 @@ describe("Database", () => {
       });
     });
   });
-  describe("Activities", () => {
+  xdescribe("Activities", () => {
     describe("getAllActivities", () => {
       it("selects and returns an array of all activities", async () => {
         const activities = await getAllActivities();
@@ -125,9 +125,9 @@ describe("Database", () => {
       });
     });
   });
-  xdescribe("Routines", () => {
+  describe("Routines", () => {
     let routineToCreateAndUpdate;
-    describe("getActivityById", () => {
+    xdescribe("getActivityById", () => {
       it("gets activities by their id", async () => {
         const activity = await getActivityById(1);
         expect(activity).toBeTruthy();
@@ -169,7 +169,7 @@ describe("Database", () => {
         );
       });
     });
-    describe("getAllPublicRoutines", () => {
+    xdescribe("getAllPublicRoutines", () => {
       let routine;
       beforeAll(async () => {
         [routine] = await getAllPublicRoutines();

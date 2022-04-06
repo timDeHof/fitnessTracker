@@ -1,5 +1,5 @@
 // require in the database adapter functions as you write them (createUser, createActivity...)
-// const { } = require('./');
+const { createRoutine, createUser, createActivity } = require("./");
 const { client } = require("./client");
 
 //step 3. users for hashing passwords
@@ -240,10 +240,10 @@ async function rebuildDB() {
     client.connect();
     await dropTables();
     await createTables();
-    // await createInitialUsers();
-    // await createInitialActivities();
-    // await createInitialRoutines();
-    // await createInitialRoutineActivities();
+    await createInitialUsers();
+    await createInitialActivities();
+    await createInitialRoutines();
+    //await createInitialRoutineActivities();
   } catch (error) {
     console.log("Error during rebuildDB");
     throw error;
