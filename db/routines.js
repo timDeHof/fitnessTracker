@@ -106,7 +106,7 @@ async function getPublicRoutinesByActivity({ id }) {
     const { rows } = await client.query(
       `SELECT *, users.username as "creatorName" FROM routines
       JOIN users ON routines."creatorId" = users.id
-      WHERE "isPublic" = 'true' AND  = '${username}';`
+      WHERE "isPublic" = 'true' AND  = '${id}';`
     );
     console.log("Public Routines by Activity:", rows);
     const updatedPublicRoutines = await attachActivitiesToRoutines(rows);
