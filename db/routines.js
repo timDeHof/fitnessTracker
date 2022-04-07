@@ -162,6 +162,6 @@ module.exports = {
   getAllPublicRoutines,
   getAllRoutinesByUser,
   getPublicRoutinesByUser,
-  //getPublicRoutinesByActivity,
+  getPublicRoutinesByActivity,
   updateRoutine,
 };

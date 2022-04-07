@@ -27,7 +27,7 @@ async function addActivityToRoutine({
     const {
       rows: [user],
     } = await client.query(
-      `INSERT INTO routineActivity( routineId, activityId, count, duration )
+      `INSERT INTO routineActivity( "routineId", "activityId", count, duration )
     VALUES ($1, $2, $3, $4)
     RETURNING *;
     `,
@@ -42,4 +42,5 @@ async function addActivityToRoutine({
 
 module.exports = {
   getRoutineActivityById,
+  addActivityToRoutine,
 };

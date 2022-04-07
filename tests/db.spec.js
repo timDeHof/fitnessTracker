@@ -125,7 +125,7 @@ describe("Database", () => {
       });
     });
   });
-  xdescribe("Routines", () => {
+  describe("Routines", () => {
     let routineToCreateAndUpdate;
     describe("getActivityById", () => {
       it("gets activities by their id", async () => {
@@ -194,7 +194,7 @@ describe("Database", () => {
           })
         );
       });
-      xit("includes duration and count on activities, from routine_activities join", async () => {
+      it("includes duration and count on activities, from routine_activities join", async () => {
         const {
           activities: [firstActivity],
         } = routine;
@@ -232,7 +232,7 @@ describe("Database", () => {
           })
         );
       });
-      xit("includes duration and count on activities, from routine_activities join", async () => {
+      it("includes duration and count on activities, from routine_activities join", async () => {
         const {
           activities: [firstActivity],
         } = routine;
@@ -271,7 +271,7 @@ describe("Database", () => {
           })
         );
       });
-      xit("includes duration and count on activities, from routine_activities join", async () => {
+      it("includes duration and count on activities, from routine_activities join", async () => {
         const {
           activities: [firstActivity],
         } = routine;
@@ -283,7 +283,7 @@ describe("Database", () => {
         );
       });
     });
-    xdescribe("getPublicRoutinesByActivity", () => {
+    describe("getPublicRoutinesByActivity", () => {
       let routine, activity;
       beforeAll(async () => {
         activity = await getActivityById(3);
@@ -400,7 +400,7 @@ describe("Database", () => {
       duration: 10000,
     };
     let routineActivityToCreateAndUpdate;
-    xdescribe("addActivityToRoutine({ routineId, activityId, count, duration })", () => {
+    describe("addActivityToRoutine({ routineId, activityId, count, duration })", () => {
       it("creates a new routine_activity, and return it", async () => {
         routineActivityToCreateAndUpdate = await addActivityToRoutine(
           routineActivityData
@@ -441,7 +441,7 @@ describe("Database", () => {
         );
       });
     });
-    xqdescribe("destroyRoutineActivity(id)", () => {
+    xdescribe("destroyRoutineActivity(id)", () => {
       it("remove routine_activity from database", async () => {
         const deletedRoutine = await destroyRoutineActivity(
           routineActivityToCreateAndUpdate.id
