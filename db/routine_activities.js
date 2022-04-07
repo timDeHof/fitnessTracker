@@ -69,9 +69,10 @@ async function destroyRoutineActivity(id) {
       rows: [routineActivity],
     } = await client.query(
       `DELETE FROM routineActivity
-      WHERE id = ${id}
+      WHERE id = $1
       RETURNING *;
-    `
+    `,
+      [id]
     );
     //console.log(routineActivity);
     return routineActivity;
@@ -82,15 +83,13 @@ async function destroyRoutineActivity(id) {
 
 async function getRoutineActivitiesByRoutine({ id }) {
   try {
-    const {
-      rows: [user],
-    } = await client.query(
+    const { rows } = await client.query(
       `SELECT * FROM routineActivity
       WHERE routineActivity."routineId" = ${id};
     `
     );
-    //console.log(user);
-    return user;
+    console.log("rows:", rows);
+    return rows;
   } catch (error) {
     console.log(error);
   }

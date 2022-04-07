@@ -152,18 +152,20 @@ async function updateRoutine({ id, ...fields }) {
 
 async function destroyRoutine(id) {
   try {
+    await client.query(`DELETE FROM routineactivity WHERE "routineId" = $1;`, [
+      id,
+    ]);
     const {
       rows: [routine],
     } = await client.query(
-      `DELETE FROM routines WHERE id = ${id} RETURNING *;`
+      `DELETE FROM routines WHERE id = $1 RETURNING *;`,
+      [id]
+      //`DELETE FROM routines WHERE id = ${id};`
     );
-    const {
-      rows: [routineId],
-    } = await client.query(
-      `SELECT DISTINCT "routineId" FROM routineactivity WHERE "routineId" = ${id} RETURN *;`
-    );
-    console.log("routineId:", routineId);
-    destroyRoutineActivity(routineId);
+    // trying to get routineId integer using SELECT query with given id
+    console.log("routine.id:", routine.id);
+    // if routine.id is in routineactivity."routineId" column then delete it
+    //destroyRoutineActivity(routineId);
     console.log("deleted routine:", routine);
     return routine;
   } catch (error) {
