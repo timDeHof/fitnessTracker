@@ -1,7 +1,7 @@
 const { user } = require("pg/lib/defaults");
 const { client } = require("./client");
 const { attachActivitiesToRoutines, getActivityById } = require("./activities");
-const { destroyRoutineActivity } = require("./routine_activities");
+//const { destroyRoutineActivity } = require("./routine_activities");
 //
 
 async function getRoutineById(id) {
@@ -93,20 +93,21 @@ async function getPublicRoutinesByUser({ username }) {
     console.log(error);
   }
 }
-
+/// causing errors
 async function getPublicRoutinesByActivity({ id }) {
+  console.log("id:", id);
+  const activity = await getActivityById(id);
+  console.log("activity:", activity);
   try {
-    const {
-      rows: [prActivity],
-    } = await client.query(
+    const { rows } = await client.query(
       `SELECT *, users.username as "creatorName",routineactivity."activityId" FROM routines
       JOIN users ON routines."creatorId" = users.id
       JOIN routineactivity ON routines.id = routineactivity."routineId"
       WHERE "isPublic" = 'true' AND routineactivity."activityId" = ${id};`
     );
-    console.log("Public Routines by Activity:", prActivity);
-    const updatedPublicRoutines = await attachActivitiesToRoutines(prActivity);
-    // console.log("updatedPublicRoutines by Activity:", updatedPublicRoutines);
+    console.log("Public Routines by Activity:", rows);
+    const updatedPublicRoutines = await attachActivitiesToRoutines(rows);
+    console.log("updatedPublicRoutines by Activity:", updatedPublicRoutines);
     return updatedPublicRoutines;
   } catch (error) {
     console.log(error);

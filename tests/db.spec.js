@@ -302,14 +302,14 @@ describe("Database", () => {
         );
         expect(routine.isPublic).toBe(true);
       });
-      xit("includes username, from users join, aliased as creatorName", async () => {
+      it("includes username, from users join, aliased as creatorName", async () => {
         expect(routine).toEqual(
           expect.objectContaining({
             creatorName: expect.any(String),
           })
         );
       });
-      xit("includes duration and count on activities, from routine_activities join", async () => {
+      it("includes duration and count on activities, from routine_activities join", async () => {
         const {
           activities: [firstActivity],
         } = routine;
