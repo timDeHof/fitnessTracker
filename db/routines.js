@@ -1,6 +1,8 @@
 const { user } = require("pg/lib/defaults");
 const { client } = require("./client");
 const { attachActivitiesToRoutines, getActivityById } = require("./activities");
+const { destroyRoutineActivity } = require("./routine_activities");
+//
 
 async function getRoutineById(id) {
   try {
@@ -31,22 +33,15 @@ async function getRoutinesWithoutActivities() {
   }
 }
 
-// activities.name as "activities_name",
-// activities.description as "activity_description"
-// FROM routines
-// LEFT JOIN routines
-// ON routines.activities."activities_name" = activities.name,
-//    routines.activities."activity_description" = activities.description
-
 async function getAllRoutines() {
   try {
     const { rows: routines } = await client.query(
       `SELECT routines.*, users.username as "creatorName" FROM routines
         JOIN users ON routines."creatorId" = users.id;`
     );
-    console.log("routines:", routines);
+    //console.log("routines:", routines);
     const UpdatedRoute = await attachActivitiesToRoutines(routines);
-    console.log("Updated Routines:", UpdatedRoute);
+    //console.log("Updated Routines:", UpdatedRoute);
     return UpdatedRoute;
   } catch (error) {
     console.log(error);
@@ -108,9 +103,9 @@ async function getPublicRoutinesByActivity({ id }) {
       JOIN users ON routines."creatorId" = users.id
       WHERE "isPublic" = 'true' AND  = '${id}';`
     );
-    console.log("Public Routines by Activity:", rows);
+    //console.log("Public Routines by Activity:", rows);
     const updatedPublicRoutines = await attachActivitiesToRoutines(rows);
-    console.log("updatedPublicRoutines by Activity:", updatedPublicRoutines);
+    //console.log("updatedPublicRoutines by Activity:", updatedPublicRoutines);
     return updatedPublicRoutines;
   } catch (error) {
     console.log(error);
@@ -154,6 +149,27 @@ async function updateRoutine({ id, ...fields }) {
     console.log(error);
   }
 }
+
+async function destroyRoutine(id) {
+  try {
+    const {
+      rows: [routine],
+    } = await client.query(
+      `DELETE FROM routines WHERE id = ${id} RETURNING *;`
+    );
+    const {
+      rows: [routineId],
+    } = await client.query(
+      `SELECT DISTINCT "routineId" FROM routineactivity WHERE "routineId" = ${id} RETURN *;`
+    );
+    console.log("routineId:", routineId);
+    destroyRoutineActivity(routineId);
+    console.log("deleted routine:", routine);
+    return routine;
+  } catch (error) {
+    console.log(error);
+  }
+}
 module.exports = {
   getAllRoutines,
   createRoutine,
@@ -162,6 +178,7 @@ module.exports = {
   getAllPublicRoutines,
   getAllRoutinesByUser,
   getPublicRoutinesByUser,
-  getPublicRoutinesByActivity,
+  //getPublicRoutinesByActivity,
   updateRoutine,
+  destroyRoutine,
 };

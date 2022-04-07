@@ -10,7 +10,7 @@ async function getRoutineActivityById(id) {
       WHERE id = ${id};
     `
     );
-    console.log(routineActivity);
+    //console.log(routineActivity);
     return routineActivity;
   } catch (error) {
     console.log(error);
@@ -33,7 +33,7 @@ async function addActivityToRoutine({
     `,
       [routineId, activityId, count, duration]
     );
-    console.log(routineActivity);
+    //console.log(routineActivity);
     return routineActivity;
   } catch (error) {
     console.log(error);
@@ -56,7 +56,7 @@ async function updateRoutineActivity({ id, ...fields }) {
     `,
       Object.values(fields)
     );
-    console.log(routineActivity);
+    //console.log(routineActivity);
     return routineActivity;
   } catch (error) {
     console.log(error);
@@ -73,7 +73,7 @@ async function destroyRoutineActivity(id) {
       RETURNING *;
     `
     );
-    console.log(routineActivity);
+    //console.log(routineActivity);
     return routineActivity;
   } catch (error) {
     console.log(error);
@@ -89,7 +89,7 @@ async function getRoutineActivitiesByRoutine({ id }) {
       WHERE routineActivity."routineId" = ${id};
     `
     );
-    console.log(user);
+    //console.log(user);
     return user;
   } catch (error) {
     console.log(error);
