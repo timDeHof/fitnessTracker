@@ -8,7 +8,7 @@ async function getActivityById(id) {
       `SELECT * FROM activities
             WHERE id = ${id};`
     );
-
+    console.log("rows:", activity);
     return activity;
   } catch (error) {
     console.log(error);
