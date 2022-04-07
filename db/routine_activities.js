@@ -28,8 +28,7 @@ async function addActivityToRoutine({
       rows: [user],
     } = await client.query(
       `INSERT INTO routineActivity( routineId, activityId, count, duration )
-    VALUES ($1, $2)
-    ON CONFLICT (name) DO NOTHING
+    VALUES ($1, $2, $3, $4)
     RETURNING *;
     `,
       [routineId, activityId, count, duration]
