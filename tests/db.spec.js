@@ -369,7 +369,7 @@ describe("Database", () => {
         expect(routineToCreateAndUpdate.goal).toBe(queriedRoutine.goal);
       });
     });
-    xdescribe("destroyRoutine", () => {
+    describe("destroyRoutine", () => {
       it("removes routine from database", async () => {
         await destroyRoutine(routineToCreateAndUpdate.id);
         const {
@@ -448,7 +448,7 @@ describe("Database", () => {
         );
         expect(deletedRoutine.id).toBe(routineActivityToCreateAndUpdate.id);
         const { rows } = await client.query(`
-          SELECT * FROM routine_activities
+          SELECT * FROM routineActivity
           WHERE id = ${deletedRoutine.id}
         `);
         expect(rows.length).toBe(0);
