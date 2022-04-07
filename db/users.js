@@ -23,8 +23,8 @@ async function createUser({ username, password }) {
 }
 
 async function getUser({ username, password }) {
-  console.log("username:", username);
-  console.log("password:", password);
+  //console.log("username:", username);
+  //console.log("password:", password);
   try {
     const {
       rows: [user],
@@ -39,7 +39,7 @@ async function getUser({ username, password }) {
       };
     }
     delete user.password;
-    console.log(user);
+    //console.log(user);
     return user;
   } catch (error) {
     console.log(error);

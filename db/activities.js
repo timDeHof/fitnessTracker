@@ -7,7 +7,7 @@ async function getActivityById(id) {
             WHERE id = ${id};
                 `
     );
-    console.log(rows);
+    //console.log(rows);
     return rows;
   } catch (error) {
     console.log(error);

@@ -244,7 +244,7 @@ describe("Database", () => {
         );
       });
     });
-    xdescribe("getPublicRoutinesByUser", () => {
+    describe("getPublicRoutinesByUser", () => {
       let routine, user;
       beforeAll(async () => {
         user = await getUserById(1);
@@ -271,7 +271,7 @@ describe("Database", () => {
           })
         );
       });
-      it("includes duration and count on activities, from routine_activities join", async () => {
+      xit("includes duration and count on activities, from routine_activities join", async () => {
         const {
           activities: [firstActivity],
         } = routine;
@@ -309,7 +309,7 @@ describe("Database", () => {
           })
         );
       });
-      it("includes duration and count on activities, from routine_activities join", async () => {
+      xit("includes duration and count on activities, from routine_activities join", async () => {
         const {
           activities: [firstActivity],
         } = routine;
@@ -335,7 +335,7 @@ describe("Database", () => {
         expect(routineToCreateAndUpdate).toEqual(queriedRoutine);
       });
     });
-    xdescribe("updateRoutine", () => {
+    describe("updateRoutine", () => {
       let queriedRoutine;
       beforeAll(async () => {
         routineToCreateAndUpdate = await updateRoutine({
@@ -400,7 +400,7 @@ describe("Database", () => {
       duration: 10000,
     };
     let routineActivityToCreateAndUpdate;
-    describe("addActivityToRoutine({ routineId, activityId, count, duration })", () => {
+    xdescribe("addActivityToRoutine({ routineId, activityId, count, duration })", () => {
       it("creates a new routine_activity, and return it", async () => {
         routineActivityToCreateAndUpdate = await addActivityToRoutine(
           routineActivityData
@@ -420,7 +420,7 @@ describe("Database", () => {
         );
       });
     });
-    describe("updateRoutineActivity({ id, count, duration })", () => {
+    xdescribe("updateRoutineActivity({ id, count, duration })", () => {
       it("Finds the routine with id equal to the passed in id. Updates the count or duration as necessary.", async () => {
         const newRoutineActivityData = {
           id: routineActivityToCreateAndUpdate.id,
@@ -441,7 +441,7 @@ describe("Database", () => {
         );
       });
     });
-    describe("destroyRoutineActivity(id)", () => {
+    xqdescribe("destroyRoutineActivity(id)", () => {
       it("remove routine_activity from database", async () => {
         const deletedRoutine = await destroyRoutineActivity(
           routineActivityToCreateAndUpdate.id

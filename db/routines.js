@@ -1,6 +1,6 @@
 const { user } = require("pg/lib/defaults");
 const { client } = require("./client");
-const { attachActivitiesToRoutines } = require("./activities");
+const { attachActivitiesToRoutines, getActivityById } = require("./activities");
 
 async function getRoutineById(id) {
   try {
@@ -11,7 +11,7 @@ async function getRoutineById(id) {
       WHERE id = ${id};
     `
     );
-    console.log(user);
+    //console.log(user);
     return user;
   } catch (error) {
     console.log(error);
@@ -24,7 +24,7 @@ async function getRoutinesWithoutActivities() {
       `SELECT * FROM routines
       `
     );
-    console.log("rows:", rows);
+    //console.log("rows:", rows);
     return rows;
   } catch (error) {
     console.log(error);
@@ -60,9 +60,9 @@ async function getAllPublicRoutines() {
       Join users ON routines."creatorId" = users.id
       WHERE "isPublic" = 'true';`
     );
-    console.log("Public Routines", rows);
+    //console.log("Public Routines", rows);
     const updatedPublicRoutines = await attachActivitiesToRoutines(rows);
-    console.log("updatedPublicRoutines:", updatedPublicRoutines);
+    //console.log("updatedPublicRoutines:", updatedPublicRoutines);
     return updatedPublicRoutines;
   } catch (error) {
     console.log(error);
@@ -72,12 +72,45 @@ async function getAllRoutinesByUser({ username }) {
   try {
     const { rows } = await client.query(
       `SELECT *, users.username as "creatorName" FROM routines
-      Join users ON routines."creatorId" = users.id
+      JOIN users ON routines."creatorId" = users.id
       WHERE users.username = '${username}';`
     );
-    console.log("Public Routines", rows);
+    //console.log("Public Routines", rows);
     const updatedPublicRoutines = await attachActivitiesToRoutines(rows);
-    console.log("updatedPublicRoutines:", updatedPublicRoutines);
+    //console.log("updatedPublicRoutines:", updatedPublicRoutines);
+    return updatedPublicRoutines;
+  } catch (error) {
+    console.log(error);
+  }
+}
+async function getPublicRoutinesByUser({ username }) {
+  try {
+    const { rows } = await client.query(
+      `SELECT *, users.username as "creatorName" FROM routines
+      JOIN users ON routines."creatorId" = users.id
+      WHERE "isPublic" = 'true' AND users.username = '${username}';`
+    );
+    //console.log("Public Routines by User", rows);
+    const updatedPublicRoutines = await attachActivitiesToRoutines(rows);
+    //console.log("updatedPublicRoutines by User:", updatedPublicRoutines);
+    return updatedPublicRoutines;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getPublicRoutinesByActivity({ id }) {
+  //let activity = await getActivityById(id);
+
+  try {
+    const { rows } = await client.query(
+      `SELECT *, users.username as "creatorName" FROM routines
+      JOIN users ON routines."creatorId" = users.id
+      WHERE "isPublic" = 'true' AND  = '${username}';`
+    );
+    console.log("Public Routines by Activity:", rows);
+    const updatedPublicRoutines = await attachActivitiesToRoutines(rows);
+    console.log("updatedPublicRoutines by Activity:", updatedPublicRoutines);
     return updatedPublicRoutines;
   } catch (error) {
     console.log(error);
@@ -96,13 +129,31 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
     `,
       [creatorId, isPublic, name, goal]
     );
-    console.log(routine);
+    //console.log(routine);
     return routine;
   } catch (error) {
     console.log(error);
   }
 }
-
+async function updateRoutine({ id, ...fields }) {
+  const setString = Object.keys(fields)
+    .map((key, index) => `"${key}"=$${index + 1}`)
+    .join(", ");
+  try {
+    const {
+      rows: [routine],
+    } = await client.query(
+      `UPDATE routines
+     SET ${setString}
+     WHERE id = ${id}
+     RETURNING *;`,
+      Object.values(fields)
+    );
+    return routine;
+  } catch (error) {
+    console.log(error);
+  }
+}
 module.exports = {
   getAllRoutines,
   createRoutine,
@@ -110,4 +161,7 @@ module.exports = {
   getRoutinesWithoutActivities,
   getAllPublicRoutines,
   getAllRoutinesByUser,
+  getPublicRoutinesByUser,
+  //getPublicRoutinesByActivity,
+  updateRoutine,
 };
