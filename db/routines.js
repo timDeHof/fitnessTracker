@@ -44,9 +44,9 @@ async function getAllRoutines() {
       `SELECT routines.*, users.username as "creatorName" FROM routines
         JOIN users ON routines."creatorId" = users.id;`
     );
-    console.log("routines:", routines);
+    //console.log("routines:", routines);
     const UpRou = await attachActivitiesToRoutines(routines);
-    console.log("Updated Routines:", UpRou);
+    //console.log("Updated Routines:", UpRou);
     return UpRou;
   } catch (error) {
     console.log(error);
@@ -55,20 +55,34 @@ async function getAllRoutines() {
 
 async function getAllPublicRoutines() {
   try {
-    const {
-      rows: [activity],
-    } = await client.query(
-      `SELECT * FROM routines
-          
-          `
+    const { rows } = await client.query(
+      `SELECT *, users.username as "creatorName" FROM routines
+      Join users ON routines."creatorId" = users.id
+      WHERE "isPublic" = 'true';`
     );
-    console.log(activity);
-    return activity;
+    console.log("Public Routines", rows);
+    const updatedPublicRoutines = await attachActivitiesToRoutines(rows);
+    console.log("updatedPublicRoutines:", updatedPublicRoutines);
+    return updatedPublicRoutines;
   } catch (error) {
     console.log(error);
   }
 }
-
+async function getAllRoutinesByUser({ username }) {
+  try {
+    const { rows } = await client.query(
+      `SELECT *, users.username as "creatorName" FROM routines
+      Join users ON routines."creatorId" = users.id
+      WHERE users.username = '${username}';`
+    );
+    console.log("Public Routines", rows);
+    const updatedPublicRoutines = await attachActivitiesToRoutines(rows);
+    console.log("updatedPublicRoutines:", updatedPublicRoutines);
+    return updatedPublicRoutines;
+  } catch (error) {
+    console.log(error);
+  }
+}
 async function createRoutine({ creatorId, isPublic, name, goal }) {
   try {
     const {
@@ -94,4 +108,6 @@ module.exports = {
   createRoutine,
   getRoutineById,
   getRoutinesWithoutActivities,
+  getAllPublicRoutines,
+  getAllRoutinesByUser,
 };

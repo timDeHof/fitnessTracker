@@ -127,7 +127,7 @@ describe("Database", () => {
   });
   describe("Routines", () => {
     let routineToCreateAndUpdate;
-    xdescribe("getActivityById", () => {
+    describe("getActivityById", () => {
       it("gets activities by their id", async () => {
         const activity = await getActivityById(1);
         expect(activity).toBeTruthy();
@@ -157,7 +157,7 @@ describe("Database", () => {
           })
         );
       });
-      it("includes duration and count on activities, from routine_activities join", async () => {
+      xit("includes duration and count on activities, from routine_activities join", async () => {
         const {
           activities: [firstActivity],
         } = routine;
@@ -169,7 +169,7 @@ describe("Database", () => {
         );
       });
     });
-    xdescribe("getAllPublicRoutines", () => {
+    describe("getAllPublicRoutines", () => {
       let routine;
       beforeAll(async () => {
         [routine] = await getAllPublicRoutines();
@@ -194,7 +194,7 @@ describe("Database", () => {
           })
         );
       });
-      it("includes duration and count on activities, from routine_activities join", async () => {
+      xit("includes duration and count on activities, from routine_activities join", async () => {
         const {
           activities: [firstActivity],
         } = routine;
@@ -206,7 +206,7 @@ describe("Database", () => {
         );
       });
     });
-    xdescribe("getAllRoutinesByUser", () => {
+    describe("getAllRoutinesByUser", () => {
       let routine, user;
       beforeAll(async () => {
         user = await getUserById(1);
@@ -232,7 +232,7 @@ describe("Database", () => {
           })
         );
       });
-      it("includes duration and count on activities, from routine_activities join", async () => {
+      xit("includes duration and count on activities, from routine_activities join", async () => {
         const {
           activities: [firstActivity],
         } = routine;
@@ -321,7 +321,7 @@ describe("Database", () => {
         );
       });
     });
-    xdescribe("createRoutine", () => {
+    describe("createRoutine", () => {
       it("creates and returns the new routine", async () => {
         routineToCreateAndUpdate = await createRoutine({
           creatorId: 2,
