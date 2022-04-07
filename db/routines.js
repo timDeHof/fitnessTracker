@@ -18,13 +18,13 @@ async function getRoutineById(id) {
   }
 }
 
-async function getRoutineWithoutActivities() {
+async function getRoutinesWithoutActivities() {
   try {
     const { rows } = await client.query(
       `SELECT * FROM routines
       `
     );
-    console.log(rows);
+    console.log("rows:", rows);
     return rows;
   } catch (error) {
     console.log(error);
@@ -45,7 +45,9 @@ async function getAllRoutines() {
         JOIN users ON routines."creatorId" = users.id;`
     );
     console.log("routines:", routines);
-    return attachActivitiesToRoutines(routines);
+    const UpRou = await attachActivitiesToRoutines(routines);
+    console.log("Updated Routines:", UpRou);
+    return UpRou;
   } catch (error) {
     console.log(error);
   }
@@ -91,5 +93,5 @@ module.exports = {
   getAllRoutines,
   createRoutine,
   getRoutineById,
-  getRoutineWithoutActivities,
+  getRoutinesWithoutActivities,
 };
