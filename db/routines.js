@@ -44,10 +44,10 @@ async function getAllRoutines() {
       `SELECT routines.*, users.username as "creatorName" FROM routines
         JOIN users ON routines."creatorId" = users.id;`
     );
-    //console.log("routines:", routines);
-    const UpRou = await attachActivitiesToRoutines(routines);
-    //console.log("Updated Routines:", UpRou);
-    return UpRou;
+    console.log("routines:", routines);
+    const UpdatedRoute = await attachActivitiesToRoutines(routines);
+    console.log("Updated Routines:", UpdatedRoute);
+    return UpdatedRoute;
   } catch (error) {
     console.log(error);
   }
