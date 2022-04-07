@@ -157,16 +157,10 @@ async function destroyRoutine(id) {
     ]);
     const {
       rows: [routine],
-    } = await client.query(
-      `DELETE FROM routines WHERE id = $1 RETURNING *;`,
-      [id]
-      //`DELETE FROM routines WHERE id = ${id};`
-    );
-    // trying to get routineId integer using SELECT query with given id
-    console.log("routine.id:", routine.id);
-    // if routine.id is in routineactivity."routineId" column then delete it
-    //destroyRoutineActivity(routineId);
-    console.log("deleted routine:", routine);
+    } = await client.query(`DELETE FROM routines WHERE id = $1 RETURNING *;`, [
+      id,
+    ]);
+
     return routine;
   } catch (error) {
     console.log(error);
@@ -180,7 +174,7 @@ module.exports = {
   getAllPublicRoutines,
   getAllRoutinesByUser,
   getPublicRoutinesByUser,
-  //getPublicRoutinesByActivity,
+  getPublicRoutinesByActivity,
   updateRoutine,
   destroyRoutine,
 };

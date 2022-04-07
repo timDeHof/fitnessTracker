@@ -15,7 +15,6 @@ async function createUser({ username, password }) {
       [username, password]
     );
     delete user.password;
-    //console.log(user);
     return user;
   } catch (error) {
     console.log(error);
@@ -23,8 +22,6 @@ async function createUser({ username, password }) {
 }
 
 async function getUser({ username, password }) {
-  //console.log("username:", username);
-  //console.log("password:", password);
   try {
     const {
       rows: [user],
@@ -39,7 +36,7 @@ async function getUser({ username, password }) {
       };
     }
     delete user.password;
-    //console.log(user);
+
     return user;
   } catch (error) {
     console.log(error);
@@ -55,10 +52,10 @@ async function getUserById(userId) {
       WHERE id = ${userId};
               `
     );
-    //console.log(user);
+
     return user;
   } catch (error) {
-    //console.log(error);
+    console.log(error);
   }
 }
 
@@ -71,7 +68,7 @@ async function getUserByUsername(username) {
         WHERE username = ${username};
                 `
     );
-    //console.log(user);
+
     return user;
   } catch (error) {
     console.log(error);
