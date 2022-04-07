@@ -125,7 +125,7 @@ describe("Database", () => {
       });
     });
   });
-  describe("Routines", () => {
+  xdescribe("Routines", () => {
     let routineToCreateAndUpdate;
     xdescribe("getActivityById", () => {
       it("gets activities by their id", async () => {
@@ -392,7 +392,7 @@ describe("Database", () => {
       });
     });
   });
-  xdescribe("Routine Activities", () => {
+  describe("Routine Activities", () => {
     const routineActivityData = {
       routineId: 4,
       activityId: 8,
