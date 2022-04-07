@@ -31,7 +31,8 @@ async function addActivityToRoutine({
     VALUES ($1, $2)
     ON CONFLICT (name) DO NOTHING
     RETURNING *;
-    `
+    `,
+      [routineId, activityId, count, duration]
     );
     console.log(user);
     return user;
