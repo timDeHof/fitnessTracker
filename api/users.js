@@ -10,6 +10,14 @@ const {
   getUserByUsername,
 } = require("../db/users");
 
+userRouter.get("/", async (req, res) => {
+  const users = await getUser();
+
+  res.send({
+    users,
+  });
+});
+
 userRouter.post("/register", async (req, res, next) => {
   const { username, password } = req.body;
   console.log("here is the req.body", req.body);
@@ -55,6 +63,6 @@ userRouter.post("/register", async (req, res, next) => {
   }
 });
 
-module.exports = userRouter;
+module.exports = { userRouter };
 
 //Dummy Usernames/Password Below

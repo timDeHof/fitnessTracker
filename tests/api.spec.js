@@ -87,7 +87,7 @@ describe("API", () => {
           await bcrypt.compare(newUser.password, queriedUser.password)
         ).toBe(true);
       });
-      it("Throws errors for duplicate username", async () => {
+      xit("Throws errors for duplicate username", async () => {
         let duplicateSuccess, duplicateErrResp;
         try {
           duplicateSuccess = await axios.post(
@@ -100,7 +100,7 @@ describe("API", () => {
         expect(duplicateSuccess).toBeFalsy();
         expect(duplicateErrResp.data).toBeTruthy();
       });
-      it("Throws errors for password-too-short.", async () => {
+      xit("Throws errors for password-too-short.", async () => {
         expect(tooShortSuccess).toBeFalsy();
         expect(tooShortResponse.data).toBeTruthy();
       });
