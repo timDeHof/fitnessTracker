@@ -8,7 +8,7 @@ activitiesRouter.use((req, res, next) => {
 
   next();
 });
-activitiesRouter.get("/", async (req, res) => {
+activitiesRouter.get("/activities", async (req, res) => {
   let allActivities = await getAllActivities();
   console.log(allActivities);
   res.send(allActivities);
