@@ -3,6 +3,7 @@ const express = require("express");
 const activitiesRouter = express.Router();
 
 const jwt = require("jsonwebtoken");
+
 const { JWT_SECRET } = process.env;
 //* Imports the database adapter functions from the db
 const {
@@ -10,7 +11,7 @@ const {
   createActivity,
   getActivityById,
 } = require("../db/activities");
-
+const { getPublicRoutinesByActivity } = require("../db/routines");
 activitiesRouter.use((req, res, next) => {
   console.log("A request is being made to /activities");
 
@@ -40,8 +41,9 @@ activitiesRouter.post("/activities", async (req, res, next) => {
   const { name, description } = res.body;
   const activityData = {};
   try {
-    activityData.name = name;
-    activityData.description = description;
+    activityData.name = res.body.name;
+    activityData.description = res.body.description;
+    console.log("activityData:", activityData);
     const newActivityData = await createActivity(activityData);
     res.send({ newActivityData });
   } catch ({ name, message }) {
@@ -55,7 +57,7 @@ activitiesRouter.post("/activities", async (req, res, next) => {
  * - updates an activity
  */
 activitiesRouter.patch("/:activityId", async (req, res, next) => {
-  console.log("req.body:", req.body);
+  //console.log("req.body:", req.body);
   const { activityId } = req.params;
   const { name, description } = req.body;
   const updateActivity = {};
@@ -91,6 +93,16 @@ activitiesRouter.patch("/:activityId", async (req, res, next) => {
  */
 activitiesRouter.get("/:activityId/routines", async (req, res, next) => {
   const { activityId } = req.params;
-  res.send("hello, this is get routines by activity");
+  console.log("activity Id:", activityId);
+  console.log("datatype for activity id:", typeof activityId);
+  try {
+    const [getAllPublicRoutines] = await getPublicRoutinesByActivity(
+      activityId
+    );
+    console.log("Public Routines by Activity:", getAllPublicRoutines);
+    res.send(getAllPublicRoutines);
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
 });
 module.exports = { activitiesRouter };
