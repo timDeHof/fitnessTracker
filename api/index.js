@@ -1,8 +1,8 @@
 const express = require("express");
 const apiRouter = express.Router();
 const jwt = require("jsonwebtoken");
-const { getUserById, getUserByUsername } = require("../db/users");
-const { getAllActivities } = require("../db/activities");
+const { getUserById } = require("../db/users");
+
 const { JWT_SECRET } = process.env;
 
 apiRouter.get("/health", (req, res) => {
@@ -15,42 +15,33 @@ apiRouter.get("/health", (req, res) => {
 
 const { activitiesRouter } = require("./activities.js");
 apiRouter.use("/activities", activitiesRouter);
-// apiRouter.get("/activities", async (req, res, next) => {
-//   let allActivities = await getAllActivities();
-//   console.log(allActivities);
-//   res.send(allActivities);
-// });
 
-// apiRouter.post("/activities", async (req, res, next) => {
+apiRouter.use(async (req, res, next) => {
+  const prefix = "Bearer ";
+  const auth = req.header("Authorization");
 
-//   res.send("hello this is post activities");
-// });
-// apiRouter.use(async (req, res, next) => {
-//   const prefix = "Bearer ";
-//   const auth = req.header("Authorization");
+  if (!auth) {
+    next();
+  } else if (auth.startsWith(prefix)) {
+    const token = auth.slice(prefix.length);
 
-//   if (!auth) {
-//     next();
-//   } else if (auth.startsWith(prefix)) {
-//     const token = auth.slice(prefix.length);
+    try {
+      const { id } = jwt.verify(token, JWT_SECRET);
 
-//     try {
-//       const { id } = jwt.verify(token, JWT_SECRET);
-
-//       if (id) {
-//         req.user = await getUserById(id);
-//         next();
-//       }
-//     } catch ({ name, message }) {
-//       next({ name, message });
-//     }
-//   } else {
-//     next({
-//       name: "AuthorizationHeaderError",
-//       message: `Authorization token must start with ${prefix}`,
-//     });
-//   }
-// });
+      if (id) {
+        req.user = await getUserById(id);
+        next();
+      }
+    } catch ({ name, message }) {
+      next({ name, message });
+    }
+  } else {
+    next({
+      name: "AuthorizationHeaderError",
+      message: `Authorization token must start with ${prefix}`,
+    });
+  }
+});
 //apiRouter.use("/routines", routines);
 //apiRouter.use("/routineActivity", routineActivity);
 

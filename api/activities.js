@@ -14,4 +14,8 @@ activitiesRouter.get("/", async (req, res) => {
   res.send(allActivities);
 });
 
+activitiesRouter.post("/activities", async (req, res, next) => {
+  res.send("hello this is post activities");
+});
+
 module.exports = { activitiesRouter };
