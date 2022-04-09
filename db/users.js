@@ -7,7 +7,7 @@ async function createUser({ username, password }) {
     const {
       rows: [user],
     } = await client.query(
-      `INSERT INTO users(username, password)
+      `INSERT INTO users("username", "password")
             VALUES ($1, $2)
             ON CONFLICT (username) DO NOTHING
             RETURNING *;
@@ -15,6 +15,7 @@ async function createUser({ username, password }) {
       [username, password]
     );
     delete user.password;
+    console.log("createUser problems", user);
     return user;
   } catch (error) {
     console.log(error);

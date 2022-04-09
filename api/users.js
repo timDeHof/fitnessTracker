@@ -11,7 +11,6 @@ const {
 } = require("../db/users");
 
 userRouter.post("/register", async (req, res, next) => {
-  // console.log("here is the req.body", req.body);
   const { username, password } = req.body;
   try {
     const _user = await getUserByUsername(username);
@@ -46,7 +45,10 @@ userRouter.post("/register", async (req, res, next) => {
       }
     );
 
+    const users = { id: user.id, username: user.username };
+
     res.send({
+      users,
       message: "thank you for signing up",
       token,
     });
