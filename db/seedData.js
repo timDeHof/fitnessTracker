@@ -83,8 +83,8 @@ async function createInitialUsers() {
     ];
     const users = await Promise.all(usersToCreate.map(createUser));
 
-    console.log("Users created:");
-    console.log(users);
+    //console.log("Users created:");
+    //console.log(users);
     console.log("Finished creating users!");
   } catch (error) {
     console.error("Error creating users!");
@@ -118,8 +118,8 @@ async function createInitialActivities() {
       activitiesToCreate.map(createActivity)
     );
 
-    console.log("activities created:");
-    console.log(activities);
+    //console.log("activities created:");
+    //console.log(activities);
 
     console.log("Finished creating activities!");
   } catch (error) {
@@ -161,7 +161,7 @@ async function createInitialRoutines() {
     const routines = await Promise.all(
       routinesToCreate.map((routine) => createRoutine(routine))
     );
-    console.log("Routines Created: ", routines);
+    //console.log("Routines Created: ", routines);
     console.log("Finished creating routines.");
   } catch (error) {
     throw error;
@@ -235,7 +235,7 @@ async function createInitialRoutineActivities() {
     const routineActivities = await Promise.all(
       routineActivitiesToCreate.map(addActivityToRoutine)
     );
-    console.log("routine_activities created: ", routineActivities);
+    //console.log("routine_activities created: ", routineActivities);
     console.log("Finished creating routine_activities!");
   } catch (error) {
     throw error;

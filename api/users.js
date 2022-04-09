@@ -14,14 +14,15 @@ userRouter.post("/register", async (req, res, next) => {
   const { username, password } = req.body;
   console.log("here is the req.body", req.body);
   try {
-    const _user = await getUserByUsername(username);
-
-    if (_user) {
-      next({
-        name: "UserExistsError",
-        message: "A user by that username already exists",
-      });
-    }
+    // const _user = await getUserByUsername({ username });
+    // console.log({ _user });
+    // console.log("The datatype of _user is ", typeof { _user });
+    // if ({ _user }) {
+    //   next({
+    //     name: "UserExistsError",
+    //     message: "A user by that username already exists",
+    //   });
+    // }
     if (password.length > 8) {
       next({
         name: "PasswordLengthError",
@@ -30,26 +31,33 @@ userRouter.post("/register", async (req, res, next) => {
       });
     }
 
-    const user = await createUser({
+    const registeredUser = await createUser({
       username,
       password,
     });
 
-    const token = jwt.sign(
-      {
-        id: user.id,
-        username,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1w",
-      }
-    );
-
-    res.send({
-      message: "thank you for signing up",
-      token,
-    });
+    console.log("registered user:", registeredUser);
+    // const token = jwt.sign(
+    //   {
+    //     id: user.id,
+    //     username: user.username,
+    //   },
+    //   process.env.JWT_SECRET,
+    //   {
+    //     expiresIn: "1w",
+    //   }
+    // );
+    console.log("token:", token);
+    //
+    // res.jsonp({
+    //   user: {
+    //     id: user.id,
+    //     username: user.username,
+    //   },
+    //   message: "thank you for signing up",
+    //   token: token,
+    // });
+    res.send({ registeredUser });
   } catch ({ name, message }) {
     next({ name, message });
   }

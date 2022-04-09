@@ -1,13 +1,30 @@
 const express = require("express");
 const apiRouter = express.Router();
 const jwt = require("jsonwebtoken");
-const { getUserById } = require("../db/users");
+const { getUserById, getUserByUsername } = require("../db/users");
+const { getAllActivities } = require("../db/activities");
 const { JWT_SECRET } = process.env;
 
 apiRouter.get("/health", (req, res) => {
-  res.send({ message: "String" });
+  res.send({ message: "Connected to route /health" });
 });
 
+const userRouter = require("./users");
+
+apiRouter.use("/users", userRouter);
+
+// const activitiesRouter = require("./activities");
+
+// apiRouter.use("/activities", activitiesRouter);
+apiRouter.get("/activities", async (req, res, next) => {
+  let allActivities = await getAllActivities();
+  console.log(allActivities);
+  res.send(allActivities);
+});
+
+apiRouter.post("/activities", async (req, res, next) => {
+  res.send("hello this is post activities");
+});
 // apiRouter.use(async (req, res, next) => {
 //   const prefix = "Bearer ";
 //   const auth = req.header("Authorization");
@@ -34,19 +51,6 @@ apiRouter.get("/health", (req, res) => {
 //     });
 //   }
 // });
-
-apiRouter.use((req, res, next) => {
-  if (req.user) {
-    console.log("User is set:", req.user);
-  }
-
-  next();
-});
-
-const userRouter = require("./users");
-const activitiesRouter = require("./activities");
-apiRouter.use("/users", userRouter);
-apiRouter.use("/activities", activitiesRouter);
 //apiRouter.use("/routines", routines);
 //apiRouter.use("/routineActivity", routineActivity);
 

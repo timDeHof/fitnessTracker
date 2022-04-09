@@ -68,7 +68,7 @@ describe("API", () => {
         expect(typeof registeredUser).toEqual("object");
         expect(registeredUser.username).toEqual(newUser.username);
       });
-      xit("Requires username and password. Requires all passwords to be at least 8 characters long.", () => {
+      it("Requires username and password. Requires all passwords to be at least 8 characters long.", () => {
         expect(newUser.password.length).toBeGreaterThan(7);
       });
       xit("EXTRA CREDIT: Hashes password before saving user to DB.", async () => {
@@ -86,6 +86,7 @@ describe("API", () => {
         expect(
           await bcrypt.compare(newUser.password, queriedUser.password)
         ).toBe(true);
+        4;
       });
       xit("Throws errors for duplicate username", async () => {
         let duplicateSuccess, duplicateErrResp;
@@ -175,7 +176,7 @@ describe("API", () => {
         expect(filteredActivity.description).toEqual(curls.description);
       });
     });
-    xdescribe("POST /activities (*)", () => {
+    describe("POST /activities (*)", () => {
       it("Creates a new activity", async () => {
         const { data: respondedActivity } = await axios.post(
           `${API_URL}/api/activities`,
