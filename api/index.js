@@ -13,7 +13,7 @@ apiRouter.get("/health", (req, res) => {
 
 // apiRouter.use("/users", userRouter);
 
-const activitiesRouter = require("./activities.js");
+const { activitiesRouter } = require("./activities.js");
 apiRouter.use("/activities", activitiesRouter);
 // apiRouter.get("/activities", async (req, res, next) => {
 //   let allActivities = await getAllActivities();
@@ -58,4 +58,4 @@ apiRouter.use((error, req, res, next) => {
   res.send({ name: error.name, message: error.message });
 });
 
-module.exports = { apiRouter };
+module.exports = apiRouter;
