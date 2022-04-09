@@ -15,6 +15,7 @@ async function createUser({ username, password }) {
       [username, password]
     );
     delete user.password;
+    console.log("user from createUser:", user);
     return user;
   } catch (error) {
     console.log(error);
@@ -60,15 +61,16 @@ async function getUserById(userId) {
 }
 
 async function getUserByUsername(username) {
+  console.log("datatype of username in getUserByUserName:", typeof username);
   try {
     const {
       rows: [user],
     } = await client.query(
       `SELECT * FROM users
-        WHERE username = ${username};
+        WHERE username = '${username}';
                 `
     );
-
+    console.log("user from getUserByUsername:", user);
     return user;
   } catch (error) {
     console.log(error);

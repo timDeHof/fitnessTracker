@@ -9,9 +9,9 @@ apiRouter.get("/health", (req, res) => {
   res.send({ message: "Connected to route /health" });
 });
 
-// const userRouter = require("./users");
+const { userRouter } = require("./users");
 
-// apiRouter.use("/users", userRouter);
+apiRouter.use("/users", userRouter);
 
 const { activitiesRouter } = require("./activities.js");
 apiRouter.use("/activities", activitiesRouter);
