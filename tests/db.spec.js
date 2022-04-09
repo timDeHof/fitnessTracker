@@ -287,6 +287,7 @@ describe("Database", () => {
       let routine, activity;
       beforeAll(async () => {
         activity = await getActivityById(3);
+        console.log("activity:", activity);
         [routine] = await getPublicRoutinesByActivity(activity);
       });
       it("selects and return an array of public routines which have a specific activityId in their routine_activities join, includes their activities", async () => {

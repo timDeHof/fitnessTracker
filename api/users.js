@@ -49,15 +49,15 @@ userRouter.post("/register", async (req, res, next) => {
     );
     console.log("token:", token);
 
-    // res.json({
-    //   user: {
-    //     id: user.id,
-    //     username: user.username,
-    //   },
-    //   message: "thank you for signing up",
-    //   token: token,
-    // });
-    res.send({ registeredUser });
+    res.json({
+      user: {
+        id: user.id,
+        username: user.username,
+      },
+      message: "thank you for signing up",
+      token: token,
+    });
+    //res.send({ registeredUser });
     req.end();
   } catch ({ name, message }) {
     next({ name, message });

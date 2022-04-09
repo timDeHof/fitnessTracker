@@ -42,7 +42,8 @@ apiRouter.use(async (req, res, next) => {
     });
   }
 });
-//apiRouter.use("/routines", routines);
+const { routinesRouter } = require("./routines");
+apiRouter.use("/routines", routinesRouter);
 //apiRouter.use("/routineActivity", routineActivity);
 
 apiRouter.use((error, req, res, next) => {
