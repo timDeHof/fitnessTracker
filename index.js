@@ -1,5 +1,5 @@
 // create the express server here
-
+const cors = require("cors");
 require("dotenv").config();
 const PORT = 3000;
 const express = require("express");
@@ -8,6 +8,7 @@ const apiRouter = require("./api");
 const { client } = require("./db/client");
 
 client.connect();
+server.use(cors());
 
 const morgan = require("morgan");
 server.use(morgan("dev"));
