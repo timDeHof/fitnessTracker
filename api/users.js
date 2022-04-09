@@ -10,17 +10,9 @@ const {
   getUserByUsername,
 } = require("../db/users");
 
-userRouter.get("/", async (req, res) => {
-  const users = await getUser();
-
-  res.send({
-    users,
-  });
-});
-
 userRouter.post("/register", async (req, res, next) => {
+  // console.log("here is the req.body", req.body);
   const { username, password } = req.body;
-  console.log("here is the req.body", req.body);
   try {
     const _user = await getUserByUsername(username);
 
@@ -60,6 +52,33 @@ userRouter.post("/register", async (req, res, next) => {
     });
   } catch ({ name, message }) {
     next({ name, message });
+  }
+});
+
+userRouter.post("/Login", async (req, res, next) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    next({
+      name: "MissingCredentialsError",
+      message: "Please supply both a username and password",
+    });
+  }
+  try {
+    const user = await getUserByUsername(username);
+    console.log(user);
+    if (user && user.password == password) {
+      const token = jwt.sign({ id: user.id, username }, JWT_SECRET);
+      res.send({ message: "you are logged in!", token });
+    } else {
+      next({
+        name: "IncorrectCredentialsError",
+        message: "Username or password is incorrect",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
 });
 

@@ -87,7 +87,7 @@ describe("API", () => {
           await bcrypt.compare(newUser.password, queriedUser.password)
         ).toBe(true);
       });
-      xit("Throws errors for duplicate username", async () => {
+      it("Throws errors for duplicate username", async () => {
         let duplicateSuccess, duplicateErrResp;
         try {
           duplicateSuccess = await axios.post(
@@ -105,8 +105,8 @@ describe("API", () => {
         expect(tooShortResponse.data).toBeTruthy();
       });
     });
-    xdescribe("POST /users/login", () => {
-      it("Logs in the user. Requires username and password, and verifies that hashed login password matches the saved hashed password.", async () => {
+    describe("POST /users/login", () => {
+      xit("Logs in the user. Requires username and password, and verifies that hashed login password matches the saved hashed password.", async () => {
         const { data } = await axios.post(
           `${API_URL}/api/users/login`,
           newUser
