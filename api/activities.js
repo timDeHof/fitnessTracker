@@ -14,4 +14,4 @@ activitiesRouter.get("/activities", async (req, res) => {
   res.send(allActivities);
 });
 
-module.exports = activitiesRouter;
+module.exports = { activitiesRouter };
