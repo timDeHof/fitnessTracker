@@ -44,7 +44,8 @@ apiRouter.use(async (req, res, next) => {
 });
 const { routinesRouter } = require("./routines");
 apiRouter.use("/routines", routinesRouter);
-//apiRouter.use("/routineActivity", routineActivity);
+const { routineActivityRouter } = require("./routineActivity");
+apiRouter.use("/routineActivity", routineActivityRouter);
 
 apiRouter.use((error, req, res, next) => {
   res.send({ name: error.name, message: error.message });
