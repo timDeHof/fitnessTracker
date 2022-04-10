@@ -8,7 +8,7 @@ async function createUser({ username, password }) {
       rows: [user],
     } = await client.query(
       `INSERT INTO users(username, password)
-            VALUES ('$1', '$2')
+            VALUES ($1, $2)
             ON CONFLICT (username) DO NOTHING
             RETURNING *;
             `,
@@ -61,13 +61,13 @@ async function getUserById(userId) {
 }
 
 async function getUserByUsername(username) {
-  console.log("datatype of username in getUserByUserName:", typeof username);
+  console.log("username feed into getUserByUserName:", username);
   try {
     const {
       rows: [user],
     } = await client.query(
       `SELECT * FROM users
-        WHERE username = '${username}';
+        WHERE users.username = '${username}';
                 `
     );
     console.log("user from getUserByUsername:", user);

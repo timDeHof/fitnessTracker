@@ -4,7 +4,7 @@ const activitiesRouter = express.Router();
 
 const jwt = require("jsonwebtoken");
 
-const { JWT_SECRET } = process.env;
+//const { JWT_SECRET } = process.env;
 //* Imports the database adapter functions from the db
 const {
   getAllActivities,
@@ -12,10 +12,29 @@ const {
   getActivityById,
 } = require("../db/activities");
 const { getPublicRoutinesByActivity } = require("../db/routines");
-activitiesRouter.use((req, res, next) => {
-  console.log("A request is being made to /activities");
+// activitiesRouter.use((req, res, next) => {
+//   console.log("A request is being made to /activities");
 
-  next();
+//   next();
+// });
+activitiesRouter.use(async (req, res, next) => {
+  const prefix = "Bearer ";
+  const auth = req.header("Authorization");
+
+  if (!auth) {
+    next();
+  } else if (auth.startsWith(prefix)) {
+    const token = auth.slice(prefix.length);
+    const { username, password } = jwt.verify(token, process.env.JWT_SECRET);
+
+    req.user = { username };
+    next();
+  } else {
+    next({
+      name: "AuthorizationHeaderError",
+      message: `Authorization token must start with ${prefix}`,
+    });
+  }
 });
 /**
  * GET request for /activities
@@ -38,11 +57,11 @@ activitiesRouter.get("/", async (req, res) => {
  * - must pass a valid token with this request, or it will be rejected
  */
 activitiesRouter.post("/activities", async (req, res, next) => {
-  const { name, description } = res.body;
+  const { name, description } = req.body;
   const activityData = {};
   try {
-    activityData.name = res.body.name;
-    activityData.description = res.body.description;
+    activityData.name = req.body.name;
+    activityData.description = req.body.description;
     console.log("activityData:", activityData);
     const newActivityData = await createActivity(activityData);
     res.send({ newActivityData });

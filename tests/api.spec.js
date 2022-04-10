@@ -176,7 +176,7 @@ describe("API", () => {
         expect(filteredActivity.description).toEqual(curls.description);
       });
     });
-    xdescribe("POST /activities (*)", () => {
+    describe("POST /activities (*)", () => {
       it("Creates a new activity", async () => {
         const { data: respondedActivity } = await axios.post(
           `${API_URL}/api/activities`,
@@ -207,7 +207,7 @@ describe("API", () => {
         );
       });
     });
-    describe("GET /activities/:activityId/routines", () => {
+    xdescribe("GET /activities/:activityId/routines", () => {
       it("Get a list of all public routines which feature that activity", async () => {
         const [testRoutine] = await getAllPublicRoutines();
         const [testActivity] = testRoutine.activities;
