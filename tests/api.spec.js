@@ -340,7 +340,7 @@ describe("API", () => {
       count: 25,
       duration: 200,
     };
-    xdescribe("PATCH /routine_activities/:routineActivityId (**)", () => {
+    describe("PATCH /routine_activities/:routineActivityId (**)", () => {
       it("Updates the count or duration on the routine activity", async () => {
         const { data: respondedRoutineActivity } = await axios.patch(
           `${API_URL}/api/routine_activities/${routineActivityToCreateAndUpdate.id}`,
@@ -370,7 +370,7 @@ describe("API", () => {
         expect(errRespondedRoutineActivity.data).toBeTruthy();
       });
     });
-    xdescribe("DELETE /routine_activities/:routineActivityId (**)", () => {
+    describe("DELETE /routine_activities/:routineActivityId (**)", () => {
       it("Removes an activity from a routine, uses hard delete", async () => {
         const { data: deletedRoutineActivity } = await axios.delete(
           `${API_URL}/api/routine_activities/${routineActivityToCreateAndUpdate.id}`,
