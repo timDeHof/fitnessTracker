@@ -4,12 +4,14 @@ const routinesRouter = express.Router();
 
 const jwt = require("jsonwebtoken");
 
+const { requireUser } = require("./utils");
 const { JWT_SECRET } = process.env;
 //* Imports the database adapter functions from the db
 
 const {
   getPublicRoutinesByActivity,
   getAllPublicRoutines,
+  createRoutine,
 } = require("../db/routines");
 routinesRouter.use((req, res, next) => {
   console.log("A request is being made to /routines");
@@ -31,21 +33,25 @@ routinesRouter.get("/", async (req, res) => {
 /**
  * POST request for /activities
  *
- * - creates a new activity in the database
+ * - creates a new routine in the database
  * - has request parameters:
- *        - name(string)
- *        - description(string)
+ *        - name(string, required)
+ *        - description(string, required)
+ *        - isPublic(boolean, optional)
  * - must pass a valid token with this request, or it will be rejected
  */
-routinesRouter.post("/activities", async (req, res, next) => {
-  const { name, description } = res.body;
-  const activityData = {};
+routinesRouter.post("/", async (req, res, next) => {
+  const { name, goal, isPublic } = req.body;
+  const routineData = {};
   try {
-    activityData.name = res.body.name;
-    activityData.description = res.body.description;
-    console.log("activityData:", activityData);
-    const newActivityData = await createActivity(activityData);
-    res.send({ newActivityData });
+    routineData.name = name;
+    routineData.goal = goal;
+    if (isPublic !== null) {
+      routineData.isPublic = isPublic;
+    }
+    console.log("routineData:", routineData);
+    const newRoutineData = await createRoutine(routineData);
+    res.send({ newRoutineData });
   } catch ({ name, message }) {
     next({ name, message });
   }

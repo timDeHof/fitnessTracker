@@ -245,7 +245,7 @@ describe("API", () => {
       });
     });
 
-    xdescribe("POST /routines (*)", () => {
+    describe("POST /routines (*)", () => {
       it("Creates a new routine, with the creatorId matching the logged in user", async () => {
         const { data: respondedRoutine } = await axios.post(
           `${API_URL}/api/routines`,
