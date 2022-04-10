@@ -2,19 +2,20 @@ const express = require("express");
 const userRouter = express.Router();
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
-
 const {
   createUser,
   getUser,
   getUserById,
   getUserByUsername,
 } = require("../db/users");
+const { token } = require("morgan");
 
+const bodyParser = require("body-parser");
+userRouter.use(bodyParser.json());
 userRouter.post("/register", async (req, res, next) => {
   //console.log("req:", req);
   const { username, password } = req.body;
-  const newUser = JSON.stringify(username);
-  const newPass = JSON.stringify(password);
+
   console.log("here is the req.body", req.body);
   try {
     // const _user = await getUserByUsername(newUser);
@@ -38,27 +39,18 @@ userRouter.post("/register", async (req, res, next) => {
     console.log("datatype of registeredUser:", typeof registeredUser);
     console.log("registered user:", registeredUser);
     const token = jwt.sign(
-      {
-        id: user.id,
-        username: user.username,
-      },
+      { id: registeredUser.id, username: registeredUser.username },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "1w",
-      }
+      { expiresIn: "1w" }
     );
     console.log("token:", token);
 
     res.json({
-      user: {
-        id: user.id,
-        username: user.username,
-      },
       message: "thank you for signing up",
       token: token,
     });
     //res.send({ registeredUser });
-    req.end();
+    //req.end();
   } catch ({ name, message }) {
     next({ name, message });
   }

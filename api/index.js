@@ -2,7 +2,8 @@ const express = require("express");
 const apiRouter = express.Router();
 const jwt = require("jsonwebtoken");
 const { getUserById } = require("../db/users");
-
+//const bodyParser = require("body-parser");
+//apiRouter.use(bodyParser.json());
 const { JWT_SECRET } = process.env;
 
 apiRouter.get("/health", (req, res) => {
