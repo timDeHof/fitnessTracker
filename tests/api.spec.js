@@ -44,7 +44,7 @@ describe("API", () => {
     expect(typeof res.data.message).toEqual("string");
   });
 
-  xdescribe("Users", () => {
+  describe("Users", () => {
     let newUser = { username: "robert", password: "bobbylong321" };
     let newUserShortPassword = { username: "robertShort", password: "bobby21" };
     describe("POST /users/register", () => {
@@ -54,6 +54,7 @@ describe("API", () => {
           `${API_URL}/api/users/register`,
           newUser
         );
+        console.log("successResponse:", successResponse);
         registeredUser = successResponse.data.user;
         try {
           tooShortSuccess = await axios.post(
@@ -65,6 +66,7 @@ describe("API", () => {
         }
       });
       it("Creates a new user.", () => {
+        console.log("register user:", registeredUser);
         expect(typeof registeredUser).toEqual("object");
         expect(registeredUser.username).toEqual(newUser.username);
       });
@@ -88,7 +90,7 @@ describe("API", () => {
         ).toBe(true);
         4;
       });
-      xit("Throws errors for duplicate username", async () => {
+      it("Throws errors for duplicate username", async () => {
         let duplicateSuccess, duplicateErrResp;
         try {
           duplicateSuccess = await axios.post(
@@ -102,6 +104,7 @@ describe("API", () => {
         expect(duplicateErrResp.data).toBeTruthy();
       });
       it("Throws errors for password-too-short.", async () => {
+        console.log("tooShortSuccess:", tooShortSuccess);
         expect(tooShortSuccess).toBeFalsy();
         expect(tooShortResponse.data).toBeTruthy();
       });
@@ -333,7 +336,7 @@ describe("API", () => {
       });
     });
   });
-  describe("routineactivities", () => {
+  xdescribe("routineactivities", () => {
     let newRoutineActivityData = {
       routineId: 3,
       activityId: 8,

@@ -14,6 +14,9 @@ async function createUser({ username, password }) {
             `,
       [username, password]
     );
+    console.log("user from createUser before delete:", user);
+    if (user === undefined) return null;
+
     delete user.password;
     console.log("user from createUser:", user);
     return user;

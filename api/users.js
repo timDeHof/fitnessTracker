@@ -53,6 +53,7 @@ userRouter.post("/register", async (req, res, next) => {
       console.log("token:", token);
 
       return res.send({
+        user: registeredUser,
         message: "thank you for signing up",
         token: token,
       });
