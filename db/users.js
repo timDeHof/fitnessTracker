@@ -1,5 +1,7 @@
 const { user } = require("pg/lib/defaults");
 const { client } = require("./client");
+const bodyParser = require("body-parser");
+userRouter.use(bodyParser.json());
 
 //hash passwords later
 async function createUser({ username, password }) {
@@ -7,7 +9,7 @@ async function createUser({ username, password }) {
     const {
       rows: [user],
     } = await client.query(
-      `INSERT INTO users("username", "password")
+      `INSERT INTO users(username, password)
             VALUES ($1, $2)
             ON CONFLICT (username) DO NOTHING
             RETURNING *;
