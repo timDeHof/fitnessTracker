@@ -1,5 +1,4 @@
 // create the express server here
-const cors = require("cors");
 require("dotenv").config();
 const PORT = 3000;
 const express = require("express");
