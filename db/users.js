@@ -16,8 +16,11 @@ async function createUser({ username, password }) {
             `,
       [username, password]
     );
+    console.log("user from createUser before delete:", user);
+    if (user === undefined) return null;
+
     delete user.password;
-    console.log("createUser problems", user);
+    console.log("user from createUser:", user);
     return user;
   } catch (error) {
     console.log(error);
@@ -63,15 +66,16 @@ async function getUserById(userId) {
 }
 
 async function getUserByUsername(username) {
+  console.log("username feed into getUserByUserName:", username);
   try {
     const {
       rows: [user],
     } = await client.query(
       `SELECT * FROM users
-        WHERE username = ${username};
+        WHERE users.username = '${username}';
                 `
     );
-
+    console.log("user from getUserByUsername:", user);
     return user;
   } catch (error) {
     console.log(error);

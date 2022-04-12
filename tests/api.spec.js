@@ -54,6 +54,7 @@ describe("API", () => {
           `${API_URL}/api/users/register`,
           newUser
         );
+        console.log("successResponse:", successResponse);
         registeredUser = successResponse.data.user;
         try {
           tooShortSuccess = await axios.post(
@@ -86,6 +87,7 @@ describe("API", () => {
         expect(
           await bcrypt.compare(newUser.password, queriedUser.password)
         ).toBe(true);
+        4;
       });
       it("Throws errors for duplicate username", async () => {
         let duplicateSuccess, duplicateErrResp;
@@ -105,8 +107,13 @@ describe("API", () => {
         expect(tooShortResponse.data).toBeTruthy();
       });
     });
+<<<<<<< HEAD
     describe("POST /users/login", () => {
       xit("Logs in the user. Requires username and password, and verifies that hashed login password matches the saved hashed password.", async () => {
+=======
+    xdescribe("POST /users/login", () => {
+      it("Logs in the user. Requires username and password, and verifies that hashed login password matches the saved hashed password.", async () => {
+>>>>>>> api_routineActivities
         const { data } = await axios.post(
           `${API_URL}/api/users/login`,
           newUser
@@ -310,6 +317,7 @@ describe("API", () => {
           { routineId: newRoutine.id, ...routineActivityToCreateAndUpdate },
           { headers: { Authorization: `Bearer ${token}` } }
         );
+        console.log("respondedRoutineActivity:", respondedRoutineActivity);
         expect(respondedRoutineActivity.routineId).toBe(newRoutine.id);
         expect(respondedRoutineActivity.activityId).toBe(
           routineActivityToCreateAndUpdate.activityId
@@ -332,17 +340,21 @@ describe("API", () => {
       });
     });
   });
+<<<<<<< HEAD
   xdescribe("routine_activities", () => {
+=======
+  describe("routineactivities", () => {
+>>>>>>> api_routineActivities
     let newRoutineActivityData = {
       routineId: 3,
       activityId: 8,
       count: 25,
       duration: 200,
     };
-    describe("PATCH /routine_activities/:routineActivityId (**)", () => {
+    describe("PATCH /routineactivities/:routineActivityId (**)", () => {
       it("Updates the count or duration on the routine activity", async () => {
         const { data: respondedRoutineActivity } = await axios.patch(
-          `${API_URL}/api/routine_activities/${routineActivityToCreateAndUpdate.id}`,
+          `${API_URL}/api/routineactivities/${routineActivityToCreateAndUpdate.id}`,
           newRoutineActivityData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -358,7 +370,7 @@ describe("API", () => {
         let respondedRoutineActivity, errRespondedRoutineActivity;
         try {
           respondedRoutineActivity = await axios.patch(
-            `${API_URL}/api/routine_activities/${4}`,
+            `${API_URL}/api/routineactivities/${4}`,
             newRoutineActivityData,
             { headers: { Authorization: `Bearer ${token}` } }
           );
@@ -369,10 +381,10 @@ describe("API", () => {
         expect(errRespondedRoutineActivity.data).toBeTruthy();
       });
     });
-    describe("DELETE /routine_activities/:routineActivityId (**)", () => {
+    describe("DELETE /routineactivities/:routineActivityId (**)", () => {
       it("Removes an activity from a routine, uses hard delete", async () => {
         const { data: deletedRoutineActivity } = await axios.delete(
-          `${API_URL}/api/routine_activities/${routineActivityToCreateAndUpdate.id}`,
+          `${API_URL}/api/routineactivities/${routineActivityToCreateAndUpdate.id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const shouldBeDeleted = await getRoutineActivityById(
@@ -393,7 +405,7 @@ describe("API", () => {
         let respondedRoutineActivity, errRespondedRoutineActivity;
         try {
           respondedRoutineActivity = await axios.delete(
-            `${API_URL}/api/routine_activities/${4}`,
+            `${API_URL}/api/routineactivities/${4}`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
         } catch (err) {

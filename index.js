@@ -7,12 +7,10 @@ const server = express();
 const apiRouter = require("./api");
 const { client } = require("./db/client");
 
-client.connect();
-server.use(cors());
-
 const morgan = require("morgan");
 server.use(morgan("dev"));
-
+const cors = require("cors");
+server.use(cors());
 server.use(express.json());
 
 server.use((req, res, next) => {
@@ -22,6 +20,7 @@ server.use((req, res, next) => {
 
   next();
 });
+client.connect();
 
 server.use("/api", apiRouter);
 
