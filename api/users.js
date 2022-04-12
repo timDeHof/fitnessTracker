@@ -12,7 +12,10 @@ const {
   getUserByUsername,
 } = require("../db/users");
 
-const { getPublicRoutinesByUser } = require("../db/routines");
+const {
+  getPublicRoutinesByUser,
+  getAllRoutinesByUser,
+} = require("../db/routines");
 
 userRouter.post("/register", async (req, res, next) => {
   const { username, password } = req.body;
@@ -100,12 +103,11 @@ userRouter.Get("/:username/routines", async (req, res, next) => {
   }
 });
 
-userRouter.Get("/users/:me", async (req, res, next) => {
-  const { me } = req.body;
-
+userRouter.Get("/users/:username", async (req, res, next) => {
+  const { username } = req.body;
   try {
-    const userInfo = getUserById(username);
-    res.send(userRoutine);
+    const userInfo = getAllRoutinesByUser(username);
+    res.send(userInfo);
   } catch ({ name, message }) {
     next({ name, message });
   }
