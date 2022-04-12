@@ -13,7 +13,7 @@ const {
   getPublicRoutinesByUser,
   getAllRoutinesByUser,
 } = require("../db/routines");
-const { token } = require("morgan");
+// const { token } = require("morgan");
 
 userRouter.post("/register", async (req, res, next) => {
   const { username, password } = req.body;
