@@ -44,7 +44,7 @@ routinesRouter.get("/", async (req, res) => {
  *        - isPublic(boolean, optional)
  * - must pass a valid token with this request, or it will be rejected
  */
-routinesRouter.post("/", async (req, res, next) => {
+routinesRouter.post("/", requireUser, async (req, res, next) => {
   const { name, goal, isPublic } = req.body;
   const routineData = {};
   try {

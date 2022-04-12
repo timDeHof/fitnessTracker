@@ -4,7 +4,7 @@ const activitiesRouter = express.Router();
 
 const jwt = require("jsonwebtoken");
 
-//const { JWT_SECRET } = process.env;
+const { JWT_SECRET } = process.env;
 //* Imports the database adapter functions from the db
 const {
   getAllActivities,

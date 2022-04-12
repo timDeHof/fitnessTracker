@@ -66,7 +66,6 @@ describe("API", () => {
         }
       });
       it("Creates a new user.", () => {
-        console.log("register user:", registeredUser);
         expect(typeof registeredUser).toEqual("object");
         expect(registeredUser.username).toEqual(newUser.username);
       });
@@ -104,7 +103,6 @@ describe("API", () => {
         expect(duplicateErrResp.data).toBeTruthy();
       });
       it("Throws errors for password-too-short.", async () => {
-        console.log("tooShortSuccess:", tooShortSuccess);
         expect(tooShortSuccess).toBeFalsy();
         expect(tooShortResponse.data).toBeTruthy();
       });
@@ -193,7 +191,7 @@ describe("API", () => {
         activityToCreateAndUpdate = respondedActivity;
       });
     });
-    xdescribe("PATCH /activities/:activityId (*)", () => {
+    describe("PATCH /activities/:activityId (*)", () => {
       it("Anyone can update an activity (yes, this could lead to long term problems a la wikipedia)", async () => {
         const newActivityData = {
           name: "Double Bicep Curls",
@@ -210,7 +208,7 @@ describe("API", () => {
         );
       });
     });
-    xdescribe("GET /activities/:activityId/routines", () => {
+    describe("GET /activities/:activityId/routines", () => {
       it("Get a list of all public routines which feature that activity", async () => {
         const [testRoutine] = await getAllPublicRoutines();
         const [testActivity] = testRoutine.activities;
@@ -288,7 +286,7 @@ describe("API", () => {
         routineToCreateAndUpdate = respondedRoutine;
       });
     });
-    xdescribe("DELETE /routines/:routineId (**)", () => {
+    describe("DELETE /routines/:routineId (**)", () => {
       it("Hard deletes a routine. Makes sure to delete all the routineActivities whose routine is the one being deleted.", async () => {
         const { data: deletedRoutine } = await axios.delete(
           `${API_URL}/api/routines/${routineToCreateAndUpdate.id}`,
@@ -314,6 +312,7 @@ describe("API", () => {
           { routineId: newRoutine.id, ...routineActivityToCreateAndUpdate },
           { headers: { Authorization: `Bearer ${token}` } }
         );
+        console.log("respondedRoutineActivity:", respondedRoutineActivity);
         expect(respondedRoutineActivity.routineId).toBe(newRoutine.id);
         expect(respondedRoutineActivity.activityId).toBe(
           routineActivityToCreateAndUpdate.activityId
@@ -336,7 +335,7 @@ describe("API", () => {
       });
     });
   });
-  xdescribe("routineactivities", () => {
+  describe("routineactivities", () => {
     let newRoutineActivityData = {
       routineId: 3,
       activityId: 8,

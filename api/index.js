@@ -49,7 +49,7 @@ const { routineActivityRouter } = require("./routineActivity");
 apiRouter.use("/routineactivities", routineActivityRouter);
 
 apiRouter.use((error, req, res, next) => {
-  res.status(404).send({ name: error.name, message: error.message });
+  res.status(500).send({ name: error.name, message: error.message });
 });
 
 module.exports = apiRouter;
