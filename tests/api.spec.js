@@ -1,7 +1,5 @@
 /* 
-
 DO NOT CHANGE THIS FILE
-
 */
 const axios = require("axios");
 require("dotenv").config();
@@ -9,7 +7,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { SERVER_ADDRESS = "http://localhost:", PORT = 3000 } = process.env;
 const API_URL = process.env.API_URL || SERVER_ADDRESS + PORT;
-const { JWT_SECRET = "don't tell a soul" } = process.env;
+const { JWT_SECRET = "neverTell" } = process.env;
 
 const { rebuildDB } = require("../db/seedData");
 const {
@@ -102,18 +100,13 @@ describe("API", () => {
         expect(duplicateSuccess).toBeFalsy();
         expect(duplicateErrResp.data).toBeTruthy();
       });
-      xit("Throws errors for password-too-short.", async () => {
+      it("Throws errors for password-too-short.", async () => {
         expect(tooShortSuccess).toBeFalsy();
         expect(tooShortResponse.data).toBeTruthy();
       });
     });
-<<<<<<< HEAD
     describe("POST /users/login", () => {
-      xit("Logs in the user. Requires username and password, and verifies that hashed login password matches the saved hashed password.", async () => {
-=======
-    xdescribe("POST /users/login", () => {
       it("Logs in the user. Requires username and password, and verifies that hashed login password matches the saved hashed password.", async () => {
->>>>>>> api_routineActivities
         const { data } = await axios.post(
           `${API_URL}/api/users/login`,
           newUser
@@ -127,7 +120,7 @@ describe("API", () => {
         expect(parsedToken.username).toEqual(registeredUser.username);
       });
     });
-    xdescribe("GET /users/me", () => {
+    describe("GET /users/me", () => {
       it("sends back users data if valid token is supplied in header", async () => {
         const { data } = await axios.get(`${API_URL}/api/users/me`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -146,7 +139,7 @@ describe("API", () => {
         expect(noTokenErrResp.data).toBeTruthy();
       });
     });
-    xdescribe("GET /users/:username/routines", () => {
+    describe("GET /users/:username/routines", () => {
       it("Gets a list of public routines for a particular user.", async () => {
         const userId = 2;
         const userWithRoutines = await getUserById(userId);
@@ -340,11 +333,7 @@ describe("API", () => {
       });
     });
   });
-<<<<<<< HEAD
-  xdescribe("routine_activities", () => {
-=======
-  describe("routineactivities", () => {
->>>>>>> api_routineActivities
+  xdescribe("routineactivities", () => {
     let newRoutineActivityData = {
       routineId: 3,
       activityId: 8,
