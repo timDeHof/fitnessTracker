@@ -1,7 +1,7 @@
 const express = require("express");
 const userRouter = express.Router();
 const jwt = require("jsonwebtoken");
-//const { JWT_SECRET } = process.env;
+const { JWT_SECRET } = process.env;
 const { requireUser } = require("./utils");
 const {
   createUser,
@@ -18,7 +18,7 @@ const {
 userRouter.post("/register", async (req, res, next) => {
   const { username, password } = req.body;
 
-  console.log("here is the req.body", req.body);
+  // console.log("here is the req.body", req.body);
   // const token = jwt.sign({ username, password }, process.env.JWT_SECRET);
   // res.send({
   //   message: "thanks for signing Up!",
@@ -65,12 +65,29 @@ userRouter.post("/register", async (req, res, next) => {
 });
 
 userRouter.post("/login", async (req, res, next) => {
-  const { id } = req.body;
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    next({
+      name: "MissingCredentialsError",
+      message: "Please supply both a username and password",
+    });
+  }
   try {
-    const newUser = getUserById(id);
-    res.send(newUser);
-  } catch ({ name, message }) {
-    next({ name, message });
+    const user = await getUserByUsername(username);
+    console.log(user);
+    if (user && user.password == password) {
+      const token = jwt.sign({ id: user.id, username }, JWT_SECRET);
+      res.send({ message: "you are logged in!", token });
+    } else {
+      next({
+        name: "IncorrectCredentialsError",
+        message: "Username or password is incorrect",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
 });
 
@@ -78,7 +95,7 @@ userRouter.get("/me", requireUser, async (req, res, next) => {
   const { username } = req.body;
   try {
     const everything = await getAllRoutinesByUser(username);
-    res.send(everything);
+    res.send({ everything });
   } catch ({ name, message }) {
     next({ name, message });
   }
@@ -86,10 +103,11 @@ userRouter.get("/me", requireUser, async (req, res, next) => {
 
 userRouter.get("/users/:username/routines", async (req, res, next) => {
   const { username } = req.params;
+  const user = getUserById(username);
 
   try {
-    const routines = await getPublicRoutinesByUser(username);
-    res.send(routines);
+    const routines = await getPublicRoutinesByUser(user.username);
+    res.send({ routines });
   } catch ({ name, message }) {
     next({ name, message });
   }
