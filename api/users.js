@@ -18,12 +18,6 @@ const {
 userRouter.post("/register", async (req, res, next) => {
   const { username, password } = req.body;
 
-  // console.log("here is the req.body", req.body);
-  // const token = jwt.sign({ username, password }, process.env.JWT_SECRET);
-  // res.send({
-  //   message: "thanks for signing Up!",
-  //   token: token,
-  // });
   console.log("password.length:", password.length);
   try {
     const _user = await getUserByUsername(username);
@@ -75,7 +69,6 @@ userRouter.post("/login", async (req, res, next) => {
   }
   try {
     const user = await getUserByUsername(username);
-    console.log(user);
     if (user && user.password == password) {
       const token = jwt.sign({ id: user.id, username }, JWT_SECRET);
       res.send({ message: "you are logged in!", token });

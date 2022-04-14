@@ -105,7 +105,7 @@ describe("API", () => {
         expect(tooShortResponse.data).toBeTruthy();
       });
     });
-    describe("POST /users/login", () => {
+    xdescribe("POST /users/login", () => {
       it("Logs in the user. Requires username and password, and verifies that hashed login password matches the saved hashed password.", async () => {
         const { data } = await axios.post(
           `${API_URL}/api/users/login`,
@@ -152,7 +152,7 @@ describe("API", () => {
       });
     });
   });
-  describe("Activities", () => {
+  xdescribe("Activities", () => {
     let activityToCreateAndUpdate = {
       name: "Bicep Curls",
       description: "They hurt, but you will thank you later",
@@ -218,7 +218,7 @@ describe("API", () => {
       });
     });
   });
-  describe("Routines", () => {
+  xdescribe("Routines", () => {
     let routineToCreateAndUpdate = {
       isPublic: true,
       name: "Elliptical Day",
@@ -333,7 +333,7 @@ describe("API", () => {
       });
     });
   });
-  describe("routineactivities", () => {
+  xdescribe("routineactivities", () => {
     let newRoutineActivityData = {
       routineId: 3,
       activityId: 8,
