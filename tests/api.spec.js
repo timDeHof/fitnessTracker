@@ -139,7 +139,7 @@ describe("API", () => {
         expect(noTokenErrResp.data).toBeTruthy();
       });
     });
-    describe("GET /users/:username/routines", () => {
+    xdescribe("GET /users/:username/routines", () => {
       it("Gets a list of public routines for a particular user.", async () => {
         const userId = 2;
         const userWithRoutines = await getUserById(userId);
@@ -152,7 +152,7 @@ describe("API", () => {
       });
     });
   });
-  xdescribe("Activities", () => {
+  describe("Activities", () => {
     let activityToCreateAndUpdate = {
       name: "Bicep Curls",
       description: "They hurt, but you will thank you later",
