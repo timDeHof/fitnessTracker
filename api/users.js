@@ -3,16 +3,8 @@ const userRouter = express.Router();
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
 const { requireUser } = require("./utils");
-const {
-  createUser,
-  getUser,
-  getUserById,
-  getUserByUsername,
-} = require("../db/users");
-const {
-  getPublicRoutinesByUser,
-  getAllRoutinesByUser,
-} = require("../db/routines");
+const { createUser, getUserByUsername } = require("../db/users");
+const { getPublicRoutinesByUser } = require("../db/routines");
 // const { token } = require("morgan");
 
 userRouter.post("/register", async (req, res, next) => {
@@ -87,10 +79,8 @@ userRouter.post("/login", async (req, res, next) => {
 });
 
 userRouter.get("/me", requireUser, async (req, res, next) => {
-  const { username } = req.body;
   try {
-    const everything = await getAllRoutinesByUser(username);
-    res.send({ everything });
+    res.send(req.user);
   } catch ({ name, message }) {
     next({ name, message });
   }
@@ -99,14 +89,10 @@ userRouter.get("/me", requireUser, async (req, res, next) => {
 userRouter.get("/:username/routines", async (req, res, next) => {
   const { username } = req.params;
 
-  const user = await getUserById(username);
+  console.log("here is the username that will help me find shit: ", username);
   try {
-    console.log(
-      "super long console log so i can figure out where this user is:",
-      user
-    );
-    const routines = await getPublicRoutinesByUser(user);
-    res.send({ routines });
+    const routines = await getPublicRoutinesByUser(username);
+    res.send(routines);
   } catch ({ name, message }) {
     next({ name, message });
   }
