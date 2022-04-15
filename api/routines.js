@@ -8,6 +8,7 @@ const { requireUser } = require("./utils");
 const { JWT_SECRET } = process.env;
 //* Imports the database adapter functions from the db
 
+const { getUser } = "../db/users";
 const {
   getPublicRoutinesByActivity,
   getAllPublicRoutines,
@@ -22,12 +23,6 @@ routinesRouter.use((req, res, next) => {
 
   next();
 });
-/**
- * GET request for /routines
- *
- * - returns a list of all public routines, including the activities in the database
- * - has no request parameters
- */
 routinesRouter.get("/", async (req, res) => {
   let allRoutines = await getAllPublicRoutines();
   //console.log("all public routines:", allRoutines);
@@ -46,6 +41,8 @@ routinesRouter.get("/", async (req, res) => {
  */
 routinesRouter.post("/", requireUser, async (req, res, next) => {
   const { name, goal, isPublic } = req.body;
+  const user = req.user;
+
   const routineData = {};
   try {
     routineData.name = name;
@@ -53,9 +50,9 @@ routinesRouter.post("/", requireUser, async (req, res, next) => {
     if (isPublic !== null) {
       routineData.isPublic = isPublic;
     }
-    console.log("routineData:", routineData);
-    const newRoutineData = await createRoutine(routineData);
-    res.send({ newRoutineData });
+    console.log(" neeed to find routine data: ", routineData);
+    const newRoutineData = await createRoutine(user.id, name, goal, isPublic);
+    res.send(newRoutineData);
   } catch ({ name, message }) {
     next({ name, message });
   }
@@ -76,7 +73,7 @@ routinesRouter.patch("/:routineId", requireUser, async (req, res, next) => {
     routineToUpdate.name = name;
   }
 
-  if (description) {
+  if (goal) {
     routineToUpdate.goal = goal;
   }
   if (isPublic !== null) {
