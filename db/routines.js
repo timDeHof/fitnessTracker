@@ -94,15 +94,12 @@ async function getPublicRoutinesByUser({ username }) {
   }
 }
 /// causing errors
-async function getPublicRoutinesByActivity({ id }) {
-  //console.log("id:", id);
-  //const activity = await getActivityById(id);
-  //console.log("activity:", activity);
+async function getPublicRoutinesByActivity(id) {
   try {
     const { rows } = await client.query(
-      `SELECT *, users.username as "creatorName",routineactivity."activityId" FROM routines
+      `SELECT *, users.username as "creatorName", activities.id as "activityId" FROM routines
       JOIN users ON routines."creatorId" = users.id
-      JOIN routineactivity ON routines.id = routineactivity."routineId"
+      JOIN activities ON activities.id = routineactivity."routineId"
       WHERE "isPublic" = 'true' AND routineactivity."activityId" = ${id};`
     );
     //console.log("Public Routines by Activity:", rows);

@@ -51,10 +51,14 @@ activitiesRouter.patch("/:activityId", async (req, res, next) => {
   }
 });
 
+//Get a list of all public routines which feature that activity
 activitiesRouter.get("/:activityId/routines", async (req, res, next) => {
   const { activityId } = req.params;
+
   try {
-    res.send(getAllPublicRoutines);
+    const something = await getPublicRoutinesByActivity(activityId);
+    console.log("We are looking for: ", something);
+    res.send(something);
   } catch ({ name, message }) {
     next({ name, message });
   }
