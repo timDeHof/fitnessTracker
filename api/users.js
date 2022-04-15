@@ -87,7 +87,7 @@ userRouter.get("/me", requireUser, async (req, res, next) => {
 });
 
 userRouter.get("/:username/routines", async (req, res, next) => {
-  const { username } = req.params;
+  const username = req.params;
 
   try {
     const routines = await getPublicRoutinesByUser(username);

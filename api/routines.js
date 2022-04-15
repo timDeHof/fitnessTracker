@@ -69,7 +69,7 @@ routinesRouter.post("/", requireUser, async (req, res, next) => {
 routinesRouter.patch("/:routineId", requireUser, async (req, res, next) => {
   //console.log("req.body:", req.body);
   const { routineId } = req.params;
-  const { name, goal, isPublic } = req.body;
+  const { name, goal, isPublic, description } = req.body;
   const routineToUpdate = {};
 
   if (name) {
