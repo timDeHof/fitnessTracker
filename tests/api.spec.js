@@ -105,7 +105,7 @@ describe("API", () => {
         expect(tooShortResponse.data).toBeTruthy();
       });
     });
-    xdescribe("POST /users/login", () => {
+    describe("POST /users/login", () => {
       it("Logs in the user. Requires username and password, and verifies that hashed login password matches the saved hashed password.", async () => {
         const { data } = await axios.post(
           `${API_URL}/api/users/login`,

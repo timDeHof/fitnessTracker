@@ -24,12 +24,14 @@ userRouter.post("/register", async (req, res, next) => {
     console.log("_user:", _user);
     console.log("The datatype of _user is ", typeof { _user });
     if (_user) {
+      res.status(401);
       next({
         name: "UserExistsError",
         message: "A user by that username already exists",
       });
     }
     if (password.length < 8) {
+      res.status(401);
       next({
         name: "PasswordLengthError",
         message:
@@ -94,12 +96,16 @@ userRouter.get("/me", requireUser, async (req, res, next) => {
   }
 });
 
-userRouter.get("/users/:username/routines", async (req, res, next) => {
+userRouter.get("/:username/routines", async (req, res, next) => {
   const { username } = req.params;
-  const user = getUserById(username);
 
+  const user = await getUserById(username);
   try {
-    const routines = await getPublicRoutinesByUser(user.username);
+    console.log(
+      "super long console log so i can figure out where this user is:",
+      user
+    );
+    const routines = await getPublicRoutinesByUser(user);
     res.send({ routines });
   } catch ({ name, message }) {
     next({ name, message });
