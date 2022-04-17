@@ -117,19 +117,29 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
     console.log(error);
   }
 }
-async function updateRoutine({ id, ...fields }) {
-  const setString = Object.keys(fields)
-    .map((key, index) => `"${key}"=$${index + 1}`)
-    .join(", ");
+async function updateRoutine({ id, name, goal, isPublic }) {
+  if (!isPublic) {
+    isPublic = false;
+  }
+  if (!name) {
+    name = "";
+  }
+  if (!goal) {
+    goal = "";
+  }
+  if (!id) {
+    id = "";
+  }
+
   try {
     const {
       rows: [routine],
     } = await client.query(
       `UPDATE routines
-     SET ${setString}
-     WHERE id = ${id}
+     SET name =  COALESCE ($1,name ), goal = COALESCE ($2,goal ), "isPublic" = COALESCE ($3,"isPublic" )
+     WHERE id = $4
      RETURNING *;`,
-      Object.values(fields)
+      [name, goal, isPublic, id]
     );
     return routine;
   } catch (error) {

@@ -57,10 +57,8 @@ activitiesRouter.patch("/:activityId", requireUser, async (req, res, next) => {
     name: name,
     description: description,
   };
-  console.log("here is update: ", update);
   try {
     const newActivity = await updateActivity(update);
-    console.log("need text: ", newActivity);
     res.send(newActivity);
   } catch ({ name, message }) {
     next({ name, message });
@@ -69,13 +67,9 @@ activitiesRouter.patch("/:activityId", requireUser, async (req, res, next) => {
 
 activitiesRouter.get("/:activityId/routines", async (req, res, next) => {
   const { activityId } = req.params;
-
   try {
-    const [getAllPublicRoutines] = await getPublicRoutinesByActivity(
-      activityId
-    );
-    console.log("Public Routines by Activity:", getAllPublicRoutines);
-    res.send(getAllPublicRoutines);
+    const stuff = await getPublicRoutinesByActivity({ id: activityId });
+    res.send(stuff);
   } catch ({ name, message }) {
     next({ name, message });
   }

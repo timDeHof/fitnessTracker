@@ -1,14 +1,9 @@
-//* Builds an activitiesRouter using express Router
 const express = require("express");
 const routinesRouter = express.Router();
-
 const jwt = require("jsonwebtoken");
-
 const { requireUser } = require("./utils");
 const { JWT_SECRET } = process.env;
-//* Imports the database adapter functions from the db
 
-const { getUser } = "../db/users";
 const {
   getPublicRoutinesByActivity,
   getAllPublicRoutines,
@@ -19,30 +14,24 @@ const {
 } = require("../db/routines");
 const { addActivityToRoutine } = require("../db/routine_activities");
 routinesRouter.use((req, res, next) => {
-  console.log("A request is being made to /routines");
-
   next();
 });
 routinesRouter.get("/", async (req, res) => {
   let allRoutines = await getAllPublicRoutines();
-  //console.log("all public routines:", allRoutines);
-  //console.log(allActivities);
   res.send(allRoutines);
 });
 
 routinesRouter.post("/", requireUser, async (req, res, next) => {
   const { name, goal, isPublic } = req.body;
-  const user = req.user;
-
-  const routineData = {};
+  const userId = req.user.id;
+  const newRoutine = {
+    creatorId: userId,
+    isPublic: isPublic,
+    name: name,
+    goal: goal,
+  };
   try {
-    routineData.name = name;
-    routineData.goal = goal;
-    if (isPublic !== null) {
-      routineData.isPublic = isPublic;
-    }
-    console.log(" neeed to find routine data: ", routineData);
-    const newRoutineData = await createRoutine(user.id, name, goal, isPublic);
+    const newRoutineData = await createRoutine(newRoutine);
     res.send(newRoutineData);
   } catch ({ name, message }) {
     next({ name, message });
@@ -52,29 +41,9 @@ routinesRouter.post("/", requireUser, async (req, res, next) => {
 routinesRouter.patch("/:routineId", requireUser, async (req, res, next) => {
   const { routineId } = req.params;
   const { name, goal, isPublic } = req.body;
-  const routineToUpdate = {};
-
-  if (name) {
-    routineToUpdate.name = name;
-  }
-
-  if (goal) {
-    routineToUpdate.goal = goal;
-  }
-  if (isPublic !== null) {
-    routineToUpdate.isPublic = isPublic;
-  }
   try {
-    const originalRoutine = await getRoutineById(routineId);
-    if (originalRoutine.id === routineId) {
-      const updatedRoutine = await updateRoutine(routineId, routineToUpdate);
-      res.send({ routine: updatedRoutine });
-    } else {
-      next({
-        name: "UnauthorizedUserError",
-        message: "You cannot update a activity that is not yours",
-      });
-    }
+    const newRoutine = await updateRoutine(routineId, name, goal, isPublic);
+    res.send(newRoutine);
   } catch ({ name, message }) {
     next({ name, message });
   }
