@@ -47,8 +47,4 @@ const { routineActivityRouter } = require("./routineActivity");
 const req = require("express/lib/request");
 apiRouter.use("/routineactivities", routineActivityRouter);
 
-apiRouter.use((error, req, res, next) => {
-  res.send({ name: error.name, message: error.message });
-});
-
 module.exports = apiRouter;

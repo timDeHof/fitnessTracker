@@ -75,15 +75,11 @@ routinesRouter.post("/:routineId/activities", async (req, res, next) => {
   const AllRoutineActivities = await getRoutineActivitiesByRoutine({
     id: routineId,
   });
-  console.log(
-    "************************AllRoutineActivities:",
-    AllRoutineActivities
-  );
-  const filterArray = AllRoutineActivities.filter(() => {
-    return AllRoutineActivities.activityId === activityId;
-  });
-  console.log("************************filterArray:", filterArray);
 
+  const filterArray = AllRoutineActivities.filter(() => {
+    return activityId === activityId;
+  });
+  console.log("a bunch of text to help me find something: ", filterArray);
   const attachedActivity = {
     routineId: routineId,
     activityId: activityId,
@@ -92,14 +88,8 @@ routinesRouter.post("/:routineId/activities", async (req, res, next) => {
   };
   try {
     if (filterArray.length === 0) {
-      const attachActivityToRoutine = await addActivityToRoutine(
-        attachedActivity
-      );
-      console.log(
-        "************************attachActivityToRoutine:",
-        attachActivityToRoutine
-      );
-      res.send(attachActivityToRoutine);
+      const attach = await addActivityToRoutine(attachedActivity);
+      res.send(attach);
     } else {
       next({ name: "pairError", message: " uh oh" });
     }

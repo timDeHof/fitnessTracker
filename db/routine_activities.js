@@ -77,14 +77,14 @@ async function destroyRoutineActivity(id) {
   }
 }
 
-async function getRoutineActivitiesByRoutine({ id }) {
+async function getRoutineActivitiesByRoutine(routine) {
   try {
+    const routineId = routine.id;
     const { rows } = await client.query(
       `SELECT * FROM routineActivity
-      WHERE routineActivity."routineId" = ${id};
+      WHERE routineActivity."routineId" = ${routineId};
     `
     );
-
     return rows;
   } catch (error) {
     console.log(error);

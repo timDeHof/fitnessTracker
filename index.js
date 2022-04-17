@@ -1,12 +1,9 @@
-// create the express server here
-
 require("dotenv").config();
 const PORT = 3000;
 const express = require("express");
 const server = express();
 const apiRouter = require("./api");
 const { client } = require("./db/client");
-
 const morgan = require("morgan");
 server.use(morgan("dev"));
 const cors = require("cors");
@@ -20,6 +17,16 @@ server.use((req, res, next) => {
 
   next();
 });
+
+server.use((error, req, res, next) => {
+  if (res.statusCode < 400) res.status(500);
+  res.send({
+    error: error.message,
+    name: error.name,
+    message: error.message,
+  });
+});
+
 client.connect();
 
 server.use("/api", apiRouter);
