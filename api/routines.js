@@ -12,7 +12,10 @@ const {
   updateRoutine,
   destroyRoutine,
 } = require("../db/routines");
-const { addActivityToRoutine } = require("../db/routine_activities");
+const {
+  addActivityToRoutine,
+  getRoutineActivitiesByRoutine,
+} = require("../db/routine_activities");
 routinesRouter.use((req, res, next) => {
   next();
 });
@@ -57,7 +60,6 @@ routinesRouter.patch("/:routineId", requireUser, async (req, res, next) => {
 
 routinesRouter.delete("/:routineId", requireUser, async (req, res, next) => {
   const { routineId } = req.params;
-  console.log("****************routineId:", typeof routineId);
 
   try {
     const deletedRoutine = await destroyRoutine(routineId);
@@ -70,16 +72,37 @@ routinesRouter.delete("/:routineId", requireUser, async (req, res, next) => {
 routinesRouter.post("/:routineId/activities", async (req, res, next) => {
   const { routineId } = req.params;
   const { activityId, count, duration } = req.body;
-  console.log("routine Id:", routineId);
-  console.log("datatype for routine id:", typeof routineId);
+  const AllRoutineActivities = await getRoutineActivitiesByRoutine({
+    id: routineId,
+  });
+  console.log(
+    "************************AllRoutineActivities:",
+    AllRoutineActivities
+  );
+  const filterArray = AllRoutineActivities.filter(() => {
+    return AllRoutineActivities.activityId === activityId;
+  });
+  console.log("************************filterArray:", filterArray);
+
+  const attachedActivity = {
+    routineId: routineId,
+    activityId: activityId,
+    count: count,
+    duration: duration,
+  };
   try {
-    const attachActivityToRoutine = await addActivityToRoutine({
-      routineId,
-      activityId,
-      count,
-      duration,
-    });
-    res.send({ attachActivityToRoutine });
+    if (filterArray.length === 0) {
+      const attachActivityToRoutine = await addActivityToRoutine(
+        attachedActivity
+      );
+      console.log(
+        "************************attachActivityToRoutine:",
+        attachActivityToRoutine
+      );
+      res.send(attachActivityToRoutine);
+    } else {
+      next({ name: "pairError", message: " uh oh" });
+    }
   } catch ({ name, message }) {
     next({ name, message });
   }
