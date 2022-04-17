@@ -57,26 +57,11 @@ routinesRouter.patch("/:routineId", requireUser, async (req, res, next) => {
 
 routinesRouter.delete("/:routineId", requireUser, async (req, res, next) => {
   const { routineId } = req.params;
+  console.log("****************routineId:", typeof routineId);
 
   try {
-    const routine = await getRoutineById(routineId);
-
-    if (routine.id === routineId) {
-      const deletedRoutine = await destroyRoutine(routineId);
-      res.send({ routine: deletedRoutine });
-    } else {
-      next(
-        routine
-          ? {
-              name: "UnauthorizedUserError",
-              message: "You cannot delete a routine which is not yours",
-            }
-          : {
-              name: "routineNotFoundError",
-              message: "That routine does not exist",
-            }
-      );
-    }
+    const deletedRoutine = await destroyRoutine(routineId);
+    res.send(deletedRoutine);
   } catch ({ name, message }) {
     next({ name, message });
   }
