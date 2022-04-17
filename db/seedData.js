@@ -11,7 +11,6 @@ const { client } = require("./client");
 
 //step 3. users for hashing passwords
 async function dropTables() {
-  console.log("Dropping All Tables...");
   try {
     await client.query(`
     DROP TABLE IF EXISTS routineActivity;
@@ -25,8 +24,6 @@ async function dropTables() {
 }
 
 async function createTables() {
-  console.log("Starting to build tables...");
-  // create all tables, in the correct order
   try {
     await client.query(`
     CREATE TABLE users(
@@ -35,7 +32,6 @@ async function createTables() {
       password VARCHAR(255) NOT NULL
     );
     `);
-    console.log("finished building tables");
   } catch (error) {
     console.log("error building tables", error);
   }
@@ -47,7 +43,6 @@ async function createTables() {
     description TEXT NOT NULL
   );
   `);
-  // I removed "NOT NULL" from "creatorId" bc it was messing up post request in routines api
   await client.query(`
   CREATE TABLE routines (
     id SERIAL PRIMARY KEY,
@@ -75,7 +70,6 @@ DO NOT CHANGE ANYTHING BELOW. This is default seed data, and will help you start
 */
 
 async function createInitialUsers() {
-  console.log("Starting to create users...");
   try {
     const usersToCreate = [
       { username: "albert", password: "bertie99" },
@@ -83,10 +77,6 @@ async function createInitialUsers() {
       { username: "glamgal", password: "glamgal123" },
     ];
     const users = await Promise.all(usersToCreate.map(createUser));
-
-    //console.log("Users created:");
-    //console.log(users);
-    console.log("Finished creating users!");
   } catch (error) {
     console.error("Error creating users!");
     throw error;
@@ -94,8 +84,6 @@ async function createInitialUsers() {
 }
 async function createInitialActivities() {
   try {
-    console.log("Starting to create activities...");
-
     const activitiesToCreate = [
       {
         name: "wide-grip standing barbell curl",
@@ -118,11 +106,6 @@ async function createInitialActivities() {
     const activities = await Promise.all(
       activitiesToCreate.map(createActivity)
     );
-
-    //console.log("activities created:");
-    //console.log(activities);
-
-    console.log("Finished creating activities!");
   } catch (error) {
     console.error("Error creating activities!");
     throw error;
@@ -131,8 +114,6 @@ async function createInitialActivities() {
 
 async function createInitialRoutines() {
   try {
-    console.log("starting to create routines...");
-
     const routinesToCreate = [
       {
         creatorId: 2,
@@ -162,8 +143,6 @@ async function createInitialRoutines() {
     const routines = await Promise.all(
       routinesToCreate.map((routine) => createRoutine(routine))
     );
-    //console.log("Routines Created: ", routines);
-    console.log("Finished creating routines.");
   } catch (error) {
     throw error;
   }
@@ -171,7 +150,6 @@ async function createInitialRoutines() {
 
 async function createInitialRoutineActivities() {
   try {
-    console.log("starting to create routine_activities...");
     const [bicepRoutine, chestRoutine, legRoutine, cardioRoutine] =
       await getRoutinesWithoutActivities();
     const [bicep1, bicep2, chest1, chest2, leg1, leg2, leg3] =
@@ -236,8 +214,6 @@ async function createInitialRoutineActivities() {
     const routineActivities = await Promise.all(
       routineActivitiesToCreate.map(addActivityToRoutine)
     );
-    //console.log("routine_activities created: ", routineActivities);
-    console.log("Finished creating routine_activities!");
   } catch (error) {
     throw error;
   }

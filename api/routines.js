@@ -29,16 +29,7 @@ routinesRouter.get("/", async (req, res) => {
   //console.log(allActivities);
   res.send(allRoutines);
 });
-/**
- * POST request for /activities
- *
- * - creates a new routine in the database
- * - has request parameters:
- *        - name(string, required)
- *        - description(string, required)
- *        - isPublic(boolean, optional)
- * - must pass a valid token with this request, or it will be rejected
- */
+
 routinesRouter.post("/", requireUser, async (req, res, next) => {
   const { name, goal, isPublic } = req.body;
   const user = req.user;
@@ -58,13 +49,7 @@ routinesRouter.post("/", requireUser, async (req, res, next) => {
   }
 });
 
-/**
- * PATCH request for /activities
- *
- * - updates an activity
- */
 routinesRouter.patch("/:routineId", requireUser, async (req, res, next) => {
-  //console.log("req.body:", req.body);
   const { routineId } = req.params;
   const { name, goal, isPublic } = req.body;
   const routineToUpdate = {};
@@ -95,12 +80,6 @@ routinesRouter.patch("/:routineId", requireUser, async (req, res, next) => {
   }
 });
 
-/**
- *  DELETE request for /routines/:routineId
- *
- *  - Hard delete a routine.
- *  - Deletes all the routineActivities whose routine is the one being deleted.
- */
 routinesRouter.delete("/:routineId", requireUser, async (req, res, next) => {
   const { routineId } = req.params;
 
@@ -128,17 +107,6 @@ routinesRouter.delete("/:routineId", requireUser, async (req, res, next) => {
   }
 });
 
-/**
- *  POST request for /routines/:routineId/activities
- *
- *  - Attaches a single activity to a routine.
- *  - Prevents duplication on (routineId, activityID) pair
- *  - Request Parameters:
- *      - activityId (number)
- *      - count (number)
- *      - duration (number)
- *
- */
 routinesRouter.post("/:routineId/activities", async (req, res, next) => {
   const { routineId } = req.params;
   const { activityId, count, duration } = req.body;

@@ -1,8 +1,6 @@
 const { user } = require("pg/lib/defaults");
 const { client } = require("./client");
 const { attachActivitiesToRoutines, getActivityById } = require("./activities");
-//const { destroyRoutineActivity } = require("./routine_activities");
-//
 
 async function getRoutineById(id) {
   try {
@@ -13,7 +11,6 @@ async function getRoutineById(id) {
       WHERE id = ${id};
     `
     );
-    //console.log(user);
     return user;
   } catch (error) {
     console.log(error);
@@ -55,9 +52,7 @@ async function getAllPublicRoutines() {
       Join users ON routines."creatorId" = users.id
       WHERE "isPublic" = 'true';`
     );
-    //console.log("Public Routines", rows);
     const updatedPublicRoutines = await attachActivitiesToRoutines(rows);
-    //console.log("updatedPublicRoutines:", updatedPublicRoutines);
     return updatedPublicRoutines;
   } catch (error) {
     console.log(error);
@@ -70,9 +65,7 @@ async function getAllRoutinesByUser({ username }) {
       JOIN users ON routines."creatorId" = users.id
       WHERE users.username = '${username}';`
     );
-    //console.log("Public Routines", rows);
     const updatedPublicRoutines = await attachActivitiesToRoutines(rows);
-    //console.log("updatedPublicRoutines:", updatedPublicRoutines);
     return updatedPublicRoutines;
   } catch (error) {
     console.log(error);
@@ -85,19 +78,14 @@ async function getPublicRoutinesByUser({ username }) {
       JOIN users ON routines."creatorId" = users.id
       WHERE "isPublic" = 'true' AND users.username = '${username}';`
     );
-    //console.log("Public Routines by User", rows);
     const updatedPublicRoutines = await attachActivitiesToRoutines(rows);
-    //console.log("updatedPublicRoutines by User:", updatedPublicRoutines);
     return updatedPublicRoutines;
   } catch (error) {
     console.log(error);
   }
 }
-/// causing errors
+
 async function getPublicRoutinesByActivity({ id }) {
-  //console.log("id:", id);
-  //const activity = await getActivityById(id);
-  //console.log("activity:", activity);
   try {
     const { rows } = await client.query(
       `SELECT *, users.username as "creatorName",routineactivity."activityId" FROM routines
@@ -105,9 +93,7 @@ async function getPublicRoutinesByActivity({ id }) {
       JOIN routineactivity ON routines.id = routineactivity."routineId"
       WHERE "isPublic" = 'true' AND routineactivity."activityId" = ${id};`
     );
-    //console.log("Public Routines by Activity:", rows);
     const updatedPublicRoutines = await attachActivitiesToRoutines(rows);
-    //console.log("updatedPublicRoutines by Activity:", updatedPublicRoutines);
     return updatedPublicRoutines;
   } catch (error) {
     console.log(error);
@@ -126,7 +112,6 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
     `,
       [creatorId, isPublic, name, goal]
     );
-    //console.log(routine);
     return routine;
   } catch (error) {
     console.log(error);

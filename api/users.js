@@ -5,16 +5,12 @@ const { JWT_SECRET } = process.env;
 const { requireUser } = require("./utils");
 const { createUser, getUserByUsername } = require("../db/users");
 const { getPublicRoutinesByUser } = require("../db/routines");
-// const { token } = require("morgan");
 
 userRouter.post("/register", async (req, res, next) => {
   const { username, password } = req.body;
-
-  console.log("password.length:", password.length);
   try {
     const _user = await getUserByUsername(username);
-    console.log("_user:", _user);
-    console.log("The datatype of _user is ", typeof { _user });
+
     if (_user) {
       res.status(401);
       next({
@@ -30,17 +26,12 @@ userRouter.post("/register", async (req, res, next) => {
           "Password is too short, please type in 8 at least 8 characters",
       });
     } else {
-      console.log("datatype of username:", typeof req.body);
       const registeredUser = await createUser(req.body);
-      console.log("datatype of registeredUser:", typeof registeredUser);
-      console.log("registered user:", registeredUser);
       const token = jwt.sign(
         { id: registeredUser.id, username: registeredUser.username },
         process.env.JWT_SECRET,
         { expiresIn: "1w" }
       );
-      console.log("token:", token);
-
       return res.send({
         user: registeredUser,
         message: "thank you for signing up",
@@ -88,10 +79,8 @@ userRouter.get("/me", requireUser, async (req, res, next) => {
 
 userRouter.get("/:username/routines", async (req, res, next) => {
   const { username } = req.params;
-
-  console.log("here is the username that will help me find shit: ", username);
   try {
-    const routines = await getPublicRoutinesByUser(username);
+    const routines = await getPublicRoutinesByUser({ username });
     res.send(routines);
   } catch ({ name, message }) {
     next({ name, message });
