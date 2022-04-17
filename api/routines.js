@@ -41,8 +41,14 @@ routinesRouter.post("/", requireUser, async (req, res, next) => {
 routinesRouter.patch("/:routineId", requireUser, async (req, res, next) => {
   const { routineId } = req.params;
   const { name, goal, isPublic } = req.body;
+  const update = {
+    id: routineId,
+    name: name,
+    goal: goal,
+    isPublic: isPublic,
+  };
   try {
-    const newRoutine = await updateRoutine(routineId, name, goal, isPublic);
+    const newRoutine = await updateRoutine(update);
     res.send(newRoutine);
   } catch ({ name, message }) {
     next({ name, message });
