@@ -5,7 +5,7 @@ const { JWT_SECRET } = process.env;
 const {
   getAllActivities,
   createActivity,
-  getActivityById,
+  updateActivity,
 } = require("../db/activities");
 const { getPublicRoutinesByActivity } = require("../db/routines");
 const { requireUser } = require("./utils");
@@ -49,8 +49,9 @@ activitiesRouter.post("/", requireUser, async (req, res, next) => {
   }
 });
 
-activitiesRouter.patch("/:activityId", async (req, res, next) => {
+activitiesRouter.patch("/:activityId", requireUser, async (req, res, next) => {
   try {
+    updateActivity;
   } catch (error) {
     console.log(error);
   }

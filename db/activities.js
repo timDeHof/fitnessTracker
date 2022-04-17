@@ -55,7 +55,6 @@ async function updateActivity({ id, name, description }) {
       `,
       [name, description, id]
     );
-
     return activity;
   } catch (error) {
     console.log(error);

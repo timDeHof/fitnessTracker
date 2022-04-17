@@ -125,7 +125,8 @@ async function updateRoutine({ id, isPublic, name, goal }) {
       `UPDATE routines
      SET "isPublic" = $1, name = $2, goal = $3
      WHERE id = $4
-     RETURNING *;`,
+     RETURNING *;
+     `,
       [isPublic, name, goal, id]
     );
     return routine;
