@@ -117,24 +117,26 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
     console.log(error);
   }
 }
-async function updateRoutine({ id, isPublic, name, goal }) {
+async function updateRoutine({ id, ...fields }) {
+  const setString = Object.keys(fields)
+    .map((key, index) => `"${key}"=$${index + 1}`)
+    .join(", ");
   try {
     const {
       rows: [routine],
     } = await client.query(
       `UPDATE routines
-     SET "isPublic" = $1, name = $2, goal = $3
-     WHERE id = $4
-     RETURNING *;
-     `,
-      [isPublic, name, goal, id]
+     SET ${setString}
+     WHERE id = ${id}
+     RETURNING *;`,
+      Object.values(fields)
     );
     return routine;
   } catch (error) {
     console.log(error);
   }
 }
-
+// id, isPublic, name, goal
 async function destroyRoutine(id) {
   try {
     await client.query(`DELETE FROM routineactivity WHERE "routineId" = $1;`, [

@@ -34,8 +34,8 @@ activitiesRouter.get("/", async (req, res, next) => {
   try {
     const allActivities = await getAllActivities();
     res.send(allActivities);
-  } catch (error) {
-    console.log(error);
+  } catch ({ name, message }) {
+    next({ name, message });
   }
 });
 
@@ -44,16 +44,26 @@ activitiesRouter.post("/", requireUser, async (req, res, next) => {
   const newActivity = await createActivity({ name, description });
   res.send(newActivity);
   try {
-  } catch (error) {
-    console.log(error);
+  } catch ({ name, message }) {
+    next({ name, message });
   }
 });
 
 activitiesRouter.patch("/:activityId", requireUser, async (req, res, next) => {
+  const { activityId } = req.params;
+  const { name, description } = req.body;
+  const update = {
+    id: activityId,
+    name: name,
+    description: description,
+  };
+  console.log("here is update: ", update);
   try {
-    updateActivity;
-  } catch (error) {
-    console.log(error);
+    const newActivity = await updateActivity(update);
+    console.log("need text: ", newActivity);
+    res.send(newActivity);
+  } catch ({ name, message }) {
+    next({ name, message });
   }
 });
 
