@@ -43,21 +43,17 @@ async function createActivity({ name, description }) {
   }
 }
 
-async function updateActivity({ id, ...fields }) {
-  const setString = Object.keys(fields)
-    .map((key, index) => `"${key}"=$${index + 1}`)
-    .join(", ");
-
+async function updateActivity({ id, name, description }) {
   try {
     const {
       rows: [activity],
     } = await client.query(
       `UPDATE activities
-      SET ${setString}
-      WHERE id = ${id}
+      SET name = $1, description = $2
+      WHERE id = $3
       RETURNING *;
       `,
-      Object.values(fields)
+      [name, description, id]
     );
 
     return activity;

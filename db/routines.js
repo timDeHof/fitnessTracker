@@ -117,19 +117,16 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
     console.log(error);
   }
 }
-async function updateRoutine({ id, ...fields }) {
-  const setString = Object.keys(fields)
-    .map((key, index) => `"${key}"=$${index + 1}`)
-    .join(", ");
+async function updateRoutine({ id, isPublic, name, goal }) {
   try {
     const {
       rows: [routine],
     } = await client.query(
       `UPDATE routines
-     SET ${setString}
-     WHERE id = ${id}
+     SET "isPublic" = $1, name = $2, goal = $3
+     WHERE id = $4
      RETURNING *;`,
-      Object.values(fields)
+      [isPublic, name, goal, id]
     );
     return routine;
   } catch (error) {
