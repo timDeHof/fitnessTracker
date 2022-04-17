@@ -63,7 +63,8 @@ async function getAllPublicRoutines() {
     console.log(error);
   }
 }
-async function getAllRoutinesByUser({ username }) {
+async function getAllRoutinesByUser(username) {
+  console.log("username from getAllRoutinesByUser:", username);
   try {
     const { rows } = await client.query(
       `SELECT *, users.username as "creatorName" FROM routines

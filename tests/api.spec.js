@@ -143,6 +143,7 @@ describe("API", () => {
       it("Gets a list of public routines for a particular user.", async () => {
         const userId = 2;
         const userWithRoutines = await getUserById(userId);
+        console.log("userWithRoutines:", userWithRoutines);
         const { data: routines } = await axios.get(
           `${API_URL}/api/users/${userWithRoutines.username}/routines`
         );
@@ -152,7 +153,7 @@ describe("API", () => {
       });
     });
   });
-  xdescribe("Activities", () => {
+  describe("Activities", () => {
     let activityToCreateAndUpdate = {
       name: "Bicep Curls",
       description: "They hurt, but you will thank you later",
@@ -218,7 +219,7 @@ describe("API", () => {
       });
     });
   });
-  xdescribe("Routines", () => {
+  describe("Routines", () => {
     let routineToCreateAndUpdate = {
       isPublic: true,
       name: "Elliptical Day",
@@ -333,7 +334,7 @@ describe("API", () => {
       });
     });
   });
-  xdescribe("routineactivities", () => {
+  describe("routineactivities", () => {
     let newRoutineActivityData = {
       routineId: 3,
       activityId: 8,

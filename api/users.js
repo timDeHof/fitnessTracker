@@ -92,6 +92,7 @@ userRouter.get("/:username/routines", async (req, res, next) => {
   console.log("here is the username that will help me find shit: ", username);
   try {
     const routines = await getPublicRoutinesByUser(username);
+    console.log("routines:", routines);
     res.send(routines);
   } catch ({ name, message }) {
     next({ name, message });
