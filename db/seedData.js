@@ -1,4 +1,3 @@
-// require in the database adapter functions as you write them (createUser, createActivity...)
 const {
   createRoutine,
   createUser,
@@ -9,7 +8,6 @@ const {
 } = require("./");
 const { client } = require("./client");
 
-//step 3. users for hashing passwords
 async function dropTables() {
   try {
     await client.query(`
