@@ -7,7 +7,7 @@ const {
   getRoutineActivityById,
   updateRoutineActivity,
 } = require("../db/routine_activities");
-
+const { getRoutineById } = require("../db/routines");
 const { requireUser } = require("./utils");
 const { JWT_SECRET } = process.env;
 //* Imports the database adapter functions from the db
@@ -33,31 +33,31 @@ routineActivityRouter.patch(
   async (req, res, next) => {
     const { routineActivityId } = req.params;
     const { count, duration } = req.body;
-    const routineactivityToUpdate = {};
-
-    // checks if count exist
-    if (count) {
-      routineactivityToUpdate.count = count;
-    }
-    // checks if duration exist
-    if (duration) {
-      routineactivityToUpdate.duration = duration;
-    }
-
+    console.log(
+      "*************************req.body + req.params:",
+      count,
+      duration,
+      routineActivityId
+    );
+    const newObj = {
+      id: routineActivityId,
+      count: count,
+      duration: duration,
+    };
     try {
-      const originalRoutineActivity = await getRoutineActivityById(
-        routineActivityId
-      );
-      if (originalRoutineActivity.id === routineActivityId) {
-        const updatedRoutineActivity = await updateRoutineActivity(
-          routineActivityId,
-          routineactivityToUpdate
-        );
-        res.send({ routineActivity: updatedRoutineActivity });
+      const routineActivity = await getRoutineActivityById(routineActivityId);
+      const routine = await getRoutineById(routineActivity.routineId);
+      console.log("*************************routine:", routine);
+
+      console.log("*************************req.user.id:", req.user.id);
+      if (routine.creatorId === req.user.id) {
+        const hello = await updateRoutineActivity(newObj);
+        console.log("*************************hello:", hello);
+        res.send(hello);
       } else {
         next({
-          name: "UnauthorizedUserError",
-          message: "You cannot update a activity that is not yours",
+          name: "error",
+          message: " you must be the  creator to edit this",
         });
       }
     } catch ({ name, message }) {

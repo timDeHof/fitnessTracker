@@ -333,7 +333,7 @@ describe("API", () => {
       });
     });
   });
-  xdescribe("routineactivities", () => {
+  describe("routineactivities", () => {
     let newRoutineActivityData = {
       routineId: 3,
       activityId: 8,
