@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const {
   getRoutineActivityById,
   updateRoutineActivity,
+  destroyRoutineActivity,
 } = require("../db/routine_activities");
 const { getRoutineById } = require("../db/routines");
 const { requireUser } = require("./utils");
@@ -33,12 +34,7 @@ routineActivityRouter.patch(
   async (req, res, next) => {
     const { routineActivityId } = req.params;
     const { count, duration } = req.body;
-    console.log(
-      "*************************req.body + req.params:",
-      count,
-      duration,
-      routineActivityId
-    );
+
     const newObj = {
       id: routineActivityId,
       count: count,
@@ -47,12 +43,10 @@ routineActivityRouter.patch(
     try {
       const routineActivity = await getRoutineActivityById(routineActivityId);
       const routine = await getRoutineById(routineActivity.routineId);
-      console.log("*************************routine:", routine);
 
-      console.log("*************************req.user.id:", req.user.id);
       if (routine.creatorId === req.user.id) {
         const hello = await updateRoutineActivity(newObj);
-        console.log("*************************hello:", hello);
+
         res.send(hello);
       } else {
         next({
@@ -79,23 +73,18 @@ routineActivityRouter.delete(
     const { routineActivityId } = req.params;
 
     try {
-      const routine = await getRoutineActivityById(routineActivityId);
+      const routineActivity = await getRoutineActivityById(routineActivityId);
+      const routine = await getRoutineById(routineActivity.routineId);
 
-      if (routine.id === routineActivityId) {
-        const deletedRoutine = await destroyRoutineActivity(routineActivityId);
-        res.send({ routine: deletedRoutine });
+      if (routine.creatorId === req.user.id) {
+        const hello = await destroyRoutineActivity(routineActivityId);
+
+        res.send(hello);
       } else {
-        next(
-          routine
-            ? {
-                name: "UnauthorizedUserError",
-                message: "You cannot delete a routine which is not yours",
-              }
-            : {
-                name: "routineNotFoundError",
-                message: "That routine does not exist",
-              }
-        );
+        next({
+          name: "error",
+          message: " you must be the  creator to edit this",
+        });
       }
     } catch ({ name, message }) {
       next({ name, message });
